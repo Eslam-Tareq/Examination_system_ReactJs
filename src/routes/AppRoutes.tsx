@@ -6,7 +6,6 @@ import AuthLayout from "@/layouts/AuthLayout";
 import MainLayout from "@/layouts/MainLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
-// Pages (هنعملها بعدين)
 const Login = () => <div>Login Page</div>;
 const ExamList = () => <div>Exam List</div>;
 const ExamStart = () => <div>Exam Start</div>;
