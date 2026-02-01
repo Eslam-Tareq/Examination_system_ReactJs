@@ -1,35 +1,22 @@
-import { UserRole } from "@/store/auth.store";
+// import http from "@/services/http";
+import { ApiResponse } from "@/services/api.types";
+import { mockLogin } from "../mocks/login.mock";
 
-const USERS = [
-  {
-    id: 1,
-    username: "student",
-    password: "123",
-    role: "student" as UserRole,
-  },
-  {
-    id: 2,
-    username: "instructor",
-    password: "123",
-    role: "instructor" as UserRole,
-  },
-];
-
-export const loginService = async (username: string, password: string) => {
-  const user = USERS.find(
-    (u) => u.username === username && u.password === password,
-  );
-
-  if (!user) {
-    throw new Error("Invalid credentials");
-  }
-
-  return {
-    user: {
-      id: user.id,
-      username: user.username,
-      role: user.role,
-    },
-    token: "DUMMY_TOKEN",
+type LoginResponse = ApiResponse<{
+  user: any;
+  token: {
+    accessToken: string;
+    expiresIn: number;
   };
+}>;
+
+export const loginService = async (
+  username: string,
+  password: string,
+): Promise<LoginResponse> => {
+  // 🔁 دلوقتي mock
+  return mockLogin(username, password);
+
+  // 🔁 لما الباك يخلص
+  // return http.post("/api/auth/login", { username, password }).then(r => r.data);
 };

@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import WelcomeText from "./WelcomeText";
-import { loginService } from "../services/auth.service";
 import { useAuthStore } from "@/store";
+import { loginService } from "../services/auth.service";
+// import WelcomeText from "./WelcomeText";
+import Logo from "./Logo";
+import { UserRoles } from "@/types/userRoles";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const login = useAuthStore((state) => state.login);
+  const login = useAuthStore((s) => s.login);
   const navigate = useNavigate();
 
-  const handleSubmit = async () => {
+  const handleLogin = async () => {
     if (!username || !password) {
       setError("Username and password are required");
       return;
@@ -20,28 +22,29 @@ const LoginForm = () => {
 
     try {
       setError("");
+      const res = await loginService(username, password);
 
-      const response = await loginService(username, password);
-
-      login(response.user, response.token);
-
-      // Redirect حسب الـ role
-      if (response.user.role === "student") {
-        navigate("/student");
-      } else {
+      login(res.user, res.token);
+      if (res.data.user.role === UserRoles.INSTRUCTOR) {
         navigate("/instructor");
+      } else {
+        navigate("/student");
       }
-    } catch {
+    } catch (error: unknown) {
+      console.log(error);
       setError("Username or password is incorrect");
     }
   };
 
   return (
-    <div className="w-[520px] bg-[#111827] border border-white/10 rounded-3xl shadow-2xl px-10 py-12">
-      <WelcomeText />
+    <div className="w-[520px] rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl shadow-2xl px-10 py-12 text-white">
+      {/* Logo */}
+      <div className="flex justify-center mb-10">
+        <Logo />
+      </div>
 
       {error && (
-        <div className="mb-6 bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg text-sm">
+        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
           {error}
         </div>
       )}
@@ -52,7 +55,7 @@ const LoginForm = () => {
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          className="w-full px-5 py-4 bg-[#0b0f1a] text-white border border-white/10 rounded-xl text-lg focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-xl border border-white/10 bg-[#0b1020]/80 px-5 py-4 text-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
         <input
@@ -60,12 +63,12 @@ const LoginForm = () => {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-5 py-4 bg-[#0b0f1a] text-white border border-white/10 rounded-xl text-lg focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-xl border border-white/10 bg-[#0b1020]/80 px-5 py-4 text-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
 
         <button
-          onClick={handleSubmit}
-          className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl"
+          onClick={handleLogin}
+          className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 py-4 text-lg font-semibold transition hover:opacity-90"
         >
           Login
         </button>

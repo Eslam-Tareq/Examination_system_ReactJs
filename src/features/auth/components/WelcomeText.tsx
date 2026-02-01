@@ -8,12 +8,11 @@ const WelcomeText = () => {
 
   useEffect(() => {
     if (index === TEXT.length) {
-      const restartTimeout = setTimeout(() => {
+      const timeout = setTimeout(() => {
         setText("");
         setIndex(0);
       }, 1500);
-
-      return () => clearTimeout(restartTimeout);
+      return () => clearTimeout(timeout);
     }
 
     const timeout = setTimeout(() => {
@@ -25,7 +24,7 @@ const WelcomeText = () => {
   }, [index]);
 
   return (
-    <h2 className="text-3xl font-semibold text-center mb-8">
+    <h2 className="mb-8 text-center text-3xl font-semibold">
       {text}
       <span className="animate-pulse">|</span>
     </h2>
