@@ -5,6 +5,7 @@ import { loginService } from "../services/auth.service";
 // import WelcomeText from "./WelcomeText";
 import Logo from "./Logo";
 import { UserRoles } from "@/types/userRoles";
+import { useToastStore } from "@/store/toast.store";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -12,6 +13,8 @@ const LoginForm = () => {
   const [error, setError] = useState("");
 
   const login = useAuthStore((s) => s.login);
+  const showToast = useToastStore((s) => s.showToast);
+
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -23,8 +26,11 @@ const LoginForm = () => {
     try {
       setError("");
       const res = await loginService(username, password);
-
-      login(res.user, res.token);
+      console.log("res", res);
+      login(res.data.user, res.data.token.accessToken);
+      if (res.success) {
+        showToast("Login successful", "success", "Welcome", 5000);
+      }
       if (res.data.user.role === UserRoles.INSTRUCTOR) {
         navigate("/instructor");
       } else {

@@ -1,3 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Slide from right + bounce */
+@keyframes toastSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(120%) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-10%) scale(1.02);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}
+
+.toast-slide-in {
+  animation: toastSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Icon pop */
+@keyframes iconPop {
+  0% {
+    transform: scale(0) rotate(-180deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.toast-icon-pop {
+  animation: iconPop 0.5s ease-out;
+}
+
+/* Progress bar */
+@keyframes toastProgress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+.animate-toast-progress {
+  animation-name: toastProgress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+/* Close rotation */
+.toast-close {
+  transition: transform 0.3s ease;
+}
+
+.toast-close:hover {
+  transform: rotate(90deg);
+}

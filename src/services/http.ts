@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useAuthStore } from "@/store";
+import { storage } from "@/utils/storage";
 
 const http = axios.create({
+  //@ts-ignore
   baseURL: import.meta.env.VITE_API_URL || "",
   headers: {
     "Content-Type": "application/json",
@@ -10,7 +11,7 @@ const http = axios.create({
 
 // Request Interceptor (Token)
 http.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
+  const token = storage.getToken();
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

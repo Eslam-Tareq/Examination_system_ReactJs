@@ -5,6 +5,7 @@ import LoginPage from "@/features/auth/pages/LoginPage";
 import AuthLayout from "@/layouts/AuthLayout";
 import MainLayout from "@/layouts/MainLayout";
 import AdminLayout from "@/layouts/AdminLayout";
+import ToastContainer from "@/components/Ui/ToastContainer";
 
 const Login = () => <div>Login Page</div>;
 const ExamList = () => <div>Exam List</div>;
@@ -21,6 +22,8 @@ const InstructorDashboard = () => (
 const AppRoutes = () => {
   return (
     <BrowserRouter>
+      <ToastContainer />
+
       <Routes>
         {/* Public */}
         <Route element={<AuthLayout />}>

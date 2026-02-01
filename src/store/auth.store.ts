@@ -1,11 +1,11 @@
 import { create } from "zustand";
-
-export type UserRole = "student" | "instructor";
+import { storage } from "@/utils/storage";
+import { UserRoles } from "@/types/userRoles";
 
 type User = {
   id: number;
   username: string;
-  role: UserRole;
+  role: UserRoles;
 };
 
 type AuthState = {
@@ -19,20 +19,26 @@ type AuthState = {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  token: null,
-  isAuthenticated: false,
+  token: storage.getToken(),
+  isAuthenticated: !!storage.getToken(),
 
-  login: (user, token) =>
+  login: (user, token) => {
+    storage.setToken(token);
+
     set({
       user,
       token,
       isAuthenticated: true,
-    }),
+    });
+  },
 
-  logout: () =>
+  logout: () => {
+    storage.removeToken();
+
     set({
       user: null,
       token: null,
       isAuthenticated: false,
-    }),
+    });
+  },
 }));
