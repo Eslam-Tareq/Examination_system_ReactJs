@@ -1,0 +1,38 @@
+/* =========================
+   Global CSS Variables
+   ========================= */
+
+:root {
+  /* Backgrounds */
+  --bg-primary: #0a0e27; /* main app background */
+  --bg-secondary: #131730; /* sidebar + header */
+  --bg-card: #1e2542; /* cards */
+
+  /* Accent colors */
+  --accent-primary: #00d9ff; /* cyan */
+  --accent-secondary: #7b2cbf; /* purple */
+  --accent-gradient: linear-gradient(135deg, #00d9ff 0%, #7b2cbf 100%);
+
+  /* Text */
+  --text-primary: #e8edf5; /* main text */
+  --text-secondary: #9ca3bc; /* muted text */
+
+  /* Borders & effects */
+  --border-color: #2a3254;
+  --glow-cyan: 0 0 30px rgba(0, 217, 255, 0.25);
+  --glow-purple: 0 0 30px rgba(123, 44, 191, 0.25);
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+
+  /* Spacing */
+  --space-sm: 12px;
+  --space-md: 20px;
+  --space-lg: 40px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}

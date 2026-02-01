@@ -6,6 +6,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 import MainLayout from "@/layouts/MainLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 import ToastContainer from "@/components/Ui/ToastContainer";
+import InstructorLayout from "@/features/instructor/layout/InstructorLayout";
 
 const Login = () => <div>Login Page</div>;
 const ExamList = () => <div>Exam List</div>;
@@ -37,7 +38,14 @@ const AppRoutes = () => {
           }
         >
           <Route path="/student" element={<StudentDashboard />} />
-          <Route path="/instructor" element={<InstructorDashboard />} />
+          <Route
+            path="/instructor"
+            element={
+              <ProtectedRoute>
+                <InstructorLayout />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         {/* Student / Exam */}

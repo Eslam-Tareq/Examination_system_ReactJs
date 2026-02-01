@@ -1,5 +1,6 @@
 import axios from "axios";
 import { storage } from "@/utils/storage";
+import { useToastStore } from "@/store/toast.store";
 
 const http = axios.create({
   //@ts-ignore
@@ -9,7 +10,9 @@ const http = axios.create({
   },
 });
 
-// Request Interceptor (Token)
+// =====================
+// Request Interceptor
+// =====================
 http.interceptors.request.use((config) => {
   const token = storage.getToken();
 
@@ -20,13 +23,55 @@ http.interceptors.request.use((config) => {
   return config;
 });
 
-// Response Interceptor (Global Errors)
+// =====================
+// Response Interceptor
+// =====================
 http.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const message = error.response?.data?.message || "Something went wrong";
+  (response) => {
+    // 🔔 Success Toast (اختياري)
+    // لو مش عايزه، سيبه commented
 
-    return Promise.reject(new Error(message));
+    const message = response.data?.message;
+    if (message) {
+      useToastStore.getState().showToast(message, "success");
+    }
+
+    return response;
+  },
+  (error) => {
+    const { response } = error;
+
+    let message = "Something went wrong";
+    let title = "Error";
+
+    if (response) {
+      const status = response.status;
+
+      message = response.data?.message || response.statusText || message;
+
+      if (status === 401) {
+        title = "Unauthorized";
+        message = "Please login again";
+
+        // optional: auto logout
+        storage.removeToken();
+        // window.location.href = "/login";
+      }
+
+      if (status === 403) {
+        title = "Access denied";
+        message = "You don't have permission";
+      }
+
+      if (status >= 500) {
+        title = "Server error";
+      }
+    }
+
+    // 🔔 Error Toast (GLOBAL)
+    useToastStore.getState().showToast(message, "error", title);
+
+    return Promise.reject(error);
   },
 );
 
