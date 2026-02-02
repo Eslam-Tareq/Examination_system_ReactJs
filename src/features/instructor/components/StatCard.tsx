@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 type Props = {
   title: string;
   value: number;
@@ -6,6 +8,26 @@ type Props = {
 };
 
 const StatCard = ({ title, value, trend, footer }: Props) => {
+  const valueRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!valueRef.current) return;
+
+    const target = value;
+    const duration = 1200;
+    const startTime = performance.now();
+
+    const update = (currentTime: number) => {
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+
+      valueRef.current!.innerText = Math.floor(progress * target).toString();
+
+      if (progress < 1) requestAnimationFrame(update);
+    };
+
+    requestAnimationFrame(update);
+  }, [value]);
+
   return (
     <div className="stat-card">
       <div className="stat-header">
@@ -13,7 +35,9 @@ const StatCard = ({ title, value, trend, footer }: Props) => {
         <span className="stat-trend">{trend}</span>
       </div>
 
-      <div className="stat-value">{value}</div>
+      <div ref={valueRef} className="stat-value">
+        0
+      </div>
 
       <div className="stat-footer">{footer}</div>
     </div>

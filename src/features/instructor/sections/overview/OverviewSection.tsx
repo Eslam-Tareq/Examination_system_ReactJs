@@ -1,7 +1,16 @@
 import StatCard from "../../components/StatCard";
 import { OVERVIEW_STATS } from "./overview.config";
+import { useEffect } from "react";
 
 const OverviewSection = () => {
+  useEffect(() => {
+    const cards = document.querySelectorAll<HTMLElement>(".stat-card");
+
+    cards.forEach((card, index) => {
+      card.style.animationDelay = `${index * 0.15}s`;
+    });
+  }, []);
+
   return (
     <section className="overview-section fade-in">
       <div className="overview-header">

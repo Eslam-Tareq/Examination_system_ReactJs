@@ -199,3 +199,8 @@ body {
   font-size: 18px;
   margin-top: 8px;
 }
+
+.stat-card {
+  opacity: 0;
+  animation: statCardIn 0.7s ease-out forwards;
+}
