@@ -31,6 +31,8 @@ export type Exam = {
 
 export type GetExamsRequest = {
   status?: ExamStatus;
+  page?: number;
+  pageSize?: number;
 };
 
 /* ===== Responses ===== */
@@ -38,4 +40,5 @@ export type GetExamsRequest = {
 export type GetExamsResponse = {
   success: boolean;
   data: ExamDTO[];
+  total?: number;
 };

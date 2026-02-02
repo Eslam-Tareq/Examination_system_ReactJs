@@ -1,5 +1,13 @@
 import { ApiResponse } from "@/services/api.types";
 import { UserRoles } from "@/types/userRoles";
+
+/**
+ * Mock for login. Replace with real API when backend is ready.
+ * Real API: POST /api/auth/login
+ * Body: { username, password }
+ * Response: ApiResponse<{ user, token }>
+ * See: src/services/mock/BACKEND_API_MAPPING.md
+ */
 type LoginData = {
   user: {
     id: number;
@@ -31,10 +39,10 @@ const MOCK_USERS = [
 
 export const mockLogin = async (
   username: string,
-  password: string,
+  password: string
 ): Promise<ApiResponse<LoginData>> => {
   const user = MOCK_USERS.find(
-    (u) => u.username === username && u.password === password,
+    (u) => u.username === username && u.password === password
   );
 
   if (!user) {

@@ -216,6 +216,7 @@ body {
   margin-bottom: 24px;
 }
 
+.section-title,
 .examinations-header h2 {
   font-family: "Orbitron", sans-serif;
   font-size: 28px;
@@ -223,6 +224,12 @@ body {
   background: var(--accent-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  margin-top: 8px;
+  font-size: 15px;
 }
 
 .btn-primary {
@@ -270,95 +277,49 @@ body {
   box-shadow: inset 0 0 0 1px var(--border-color);
 }
 
-/* Exam Cards */
+/* ===== Examinations section (single source) ===== */
+
 .exam-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+.exam-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .exam-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 18px;
-  padding: 24px;
-  transition: 0.35s ease;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: var(--transition-base);
 }
 
 .exam-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 0 35px rgba(0, 217, 255, 0.25);
+  box-shadow: var(--glow-cyan);
   border-color: var(--accent-primary);
 }
 
-.exam-card h3 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.exam-card p {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-@keyframes livePulse {
-  0% {
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
-  }
-  100% {
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
-  }
-}
-/* =====================
-   EXAMINATION SECTION
-===================== */
-
-.exam-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* Card */
-.exam-card {
-  background: linear-gradient(180deg, #1b2244 0%, #161c3a 100%);
-  border: 1px solid #2a3254;
-  border-radius: 18px;
-  padding: 24px 28px;
-  transition: all 0.35s ease;
-}
-
-.exam-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 0 30px rgba(0, 217, 255, 0.15);
-}
-
-/* Header */
 .exam-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .exam-title {
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 10px;
+  color: var(--text-primary);
 }
 
-/* Meta */
-.exam-meta {
-  display: flex;
-  gap: 18px;
-  font-size: 14px;
-  color: #9ca3bc;
-}
-
-/* Status */
 .exam-status {
   padding: 6px 14px;
   border-radius: 20px;
@@ -369,11 +330,11 @@ body {
 
 .exam-status.upcoming {
   background: rgba(0, 217, 255, 0.15);
-  color: #00d9ff;
+  color: var(--accent-primary);
 }
 
 .exam-status.active {
-  background: rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.15);
   color: #10b981;
 }
 
@@ -382,23 +343,36 @@ body {
   color: #a78bfa;
 }
 
-/* Progress */
-.exam-progress {
+.exam-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
 }
 
-.exam-progress-bar {
-  height: 20px;
+.exam-course {
+  background: rgba(123, 44, 191, 0.18);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #c4b5fd;
 }
 
-.exam-progress-fill {
-  height: 20px;
+.exam-questions {
+  color: var(--accent-primary);
+  font-weight: 600;
 }
 
-/* Actions */
+.exam-date {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
 .exam-actions {
   display: flex;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 6px;
 }
 
 .action-btn {
@@ -407,7 +381,7 @@ body {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition-fast);
   border: 1px solid transparent;
 }
 
@@ -433,100 +407,19 @@ body {
   background: var(--bg-secondary);
 }
 
-/* ===== Exam Cards ===== */
-
-.exam-cards {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.exam-progress-bar,
+.exam-progress-fill {
+  height: 20px;
 }
 
-/* Card */
-.exam-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 18px;
-  padding: 24px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  transition: 0.3s ease;
-}
-
-.exam-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 217, 255, 0.18);
-}
-
-/* Header */
-.exam-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.exam-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-/* Status */
-.exam-status {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.exam-status.upcoming {
-  background: rgba(0, 217, 255, 0.15);
-  color: var(--accent-primary);
-}
-
-.exam-status.active {
-  background: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-}
-
-.exam-status.completed {
-  background: rgba(123, 44, 191, 0.2);
-  color: #a78bfa;
-}
-
-/* Meta */
-.exam-meta {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.exam-course {
-  background: rgba(123, 44, 191, 0.18);
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-weight: 600;
-  color: #c4b5fd;
-}
-
-.exam-questions {
-  color: var(--accent-primary);
-  font-weight: 600;
-}
-
-/* Date */
-.exam-date {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
-/* Actions */
-.exam-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 6px;
+@keyframes livePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+  }
 }
 
 /* ===== Exam Edit Button ===== */
@@ -549,4 +442,56 @@ body {
   background: rgba(0, 217, 255, 0.2);
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 217, 255, 0.35);
+}
+
+/* ===== Exam Preview Page (questions list with pagination) ===== */
+
+.exam-preview-page {
+  padding: 0;
+}
+
+.exam-preview-header {
+  margin-bottom: var(--space-lg, 40px);
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  margin-bottom: var(--space-md, 20px);
+  border-radius: var(--radius-sm, 12px);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-back:hover {
+  background: var(--bg-tertiary);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.exam-preview-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 8px 0;
+}
+
+.exam-preview-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin: 0;
+}
+
+.exam-preview-questions {
+  margin-bottom: var(--space-lg, 40px);
 }

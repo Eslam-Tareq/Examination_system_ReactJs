@@ -1,30 +1,49 @@
+import ExamPreviewPage from "@/features/instructor/pages/ExamPreviewPage";
+import Pagination from "@/components/pagination/Pagination";
+import { getExamsPaginated } from "@/services/examination/exam.service";
+import { Exam, ExamStatus } from "@/services/examination/exam.types";
 import { useEffect, useState } from "react";
 import ExamCard from "../../components/ExamCard";
-import { Exam, ExamStatus } from "./exam.types";
-import { getExams } from "./exam.service";
+import { EXAM_TABS } from "./examinations.config";
 
-const TABS: { id: ExamStatus; label: string }[] = [
-  { id: "upcoming", label: "Upcoming" },
-  { id: "active", label: "Active" },
-  { id: "completed", label: "Completed" },
-];
+const EXAMS_PAGE_SIZE = 6;
 
 const ExaminationsSection = () => {
   const [activeTab, setActiveTab] = useState<ExamStatus>("upcoming");
   const [exams, setExams] = useState<Exam[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [previewExam, setPreviewExam] = useState<Exam | null>(null);
 
   useEffect(() => {
     setLoading(true);
-
-    getExams(activeTab)
-      .then((data) => setExams(data))
+    getExamsPaginated(activeTab, page, EXAMS_PAGE_SIZE)
+      .then(({ data, total: t }) => {
+        setExams(data);
+        setTotal(t);
+      })
       .finally(() => setLoading(false));
+  }, [activeTab, page]);
+
+  useEffect(() => {
+    setPage(1);
   }, [activeTab]);
+
+  if (previewExam) {
+    return (
+      <section className="examinations-section fade-in">
+        <ExamPreviewPage
+          examId={Number(previewExam.id)}
+          examTitle={previewExam.title}
+          onBack={() => setPreviewExam(null)}
+        />
+      </section>
+    );
+  }
 
   return (
     <section className="examinations-section fade-in">
-      {/* Header */}
       <div className="examinations-header">
         <div>
           <h2 className="section-title">Examinations</h2>
@@ -33,14 +52,16 @@ const ExaminationsSection = () => {
           </p>
         </div>
 
-        <button className="btn-primary">+ Create Exam</button>
+        <button type="button" className="btn-primary">
+          + Create Exam
+        </button>
       </div>
 
-      {/* Tabs */}
       <div className="exam-tabs">
-        {TABS.map((tab) => (
+        {EXAM_TABS.map((tab) => (
           <button
             key={tab.id}
+            type="button"
             className={`exam-tab ${activeTab === tab.id ? "active" : ""}`}
             onClick={() => setActiveTab(tab.id)}
           >
@@ -49,7 +70,6 @@ const ExaminationsSection = () => {
         ))}
       </div>
 
-      {/* Content */}
       <div className="exam-cards">
         {loading && <p className="text-muted">Loading exams...</p>}
 
@@ -58,8 +78,24 @@ const ExaminationsSection = () => {
         )}
 
         {!loading &&
-          exams.map((exam) => <ExamCard key={exam.id} exam={exam} />)}
+          exams.map((exam) => (
+            <ExamCard
+              key={exam.id}
+              exam={exam}
+              onPreviewClick={setPreviewExam}
+            />
+          ))}
       </div>
+
+      {!loading && total > EXAMS_PAGE_SIZE && (
+        <Pagination
+          page={page}
+          pageSize={EXAMS_PAGE_SIZE}
+          total={total}
+          onChange={setPage}
+          siblingCount={1}
+        />
+      )}
     </section>
   );
 };

@@ -7,6 +7,7 @@
   --bg-primary: #0a0e27; /* main app background */
   --bg-secondary: #131730; /* sidebar + header */
   --bg-card: #1e2542; /* cards */
+  --bg-tertiary: #161c3a; /* tabs, inputs */
 
   /* Accent colors */
   --accent-primary: #00d9ff; /* cyan */
@@ -16,9 +17,12 @@
   /* Text */
   --text-primary: #e8edf5; /* main text */
   --text-secondary: #9ca3bc; /* muted text */
+  --text-muted: #6b7280; /* subtle labels */
 
   /* Borders & effects */
   --border-color: #2a3254;
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.15);
   --glow-cyan: 0 0 30px rgba(0, 217, 255, 0.25);
   --glow-purple: 0 0 30px rgba(123, 44, 191, 0.25);
 
