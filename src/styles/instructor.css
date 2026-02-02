@@ -29,9 +29,14 @@ body {
 
 .sidebar {
   width: 280px;
+  min-width: 280px;
+  flex-shrink: 0;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
   padding: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-logo {
@@ -42,22 +47,61 @@ body {
   -webkit-background-clip: text;
   color: transparent;
   margin-bottom: 40px;
+  flex-shrink: 0;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .sidebar-item {
+  display: block;
   width: 100%;
-  padding: 18px;
-  border-radius: 14px;
+  box-sizing: border-box;
+  padding: 14px 18px;
+  border-radius: 12px;
   text-align: left;
   color: var(--text-secondary);
-  transition: 0.3s;
+  transition: background 0.2s, color 0.2s;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  font-family: inherit;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.sidebar-item:hover,
+.sidebar-item:focus {
+  outline: none;
+}
+
+.sidebar-item:not(.active):hover:not(.disabled) {
+  color: var(--text-primary);
+  background: rgba(0, 217, 255, 0.06);
+}
+
 .sidebar-item.active {
   color: var(--text-primary);
-  background: rgba(0, 217, 255, 0.08);
-  border-left: 4px solid var(--accent-primary);
+  background: rgba(0, 217, 255, 0.12);
+  box-shadow: inset 3px 0 0 0 var(--accent-primary);
+}
+
+.sidebar-item.active:hover {
+  background: rgba(0, 217, 255, 0.12);
+}
+
+.sidebar-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .instructor-main {
@@ -494,4 +538,294 @@ body {
 
 .exam-preview-questions {
   margin-bottom: var(--space-lg, 40px);
+}
+
+/* ===== Exam Edit Page ===== */
+
+.exam-edit-page {
+  padding: 0;
+}
+
+.exam-edit-header {
+  margin-bottom: var(--space-lg, 40px);
+}
+
+.exam-edit-form-section,
+.exam-edit-questions-section,
+.exam-edit-question-form-section {
+  margin-bottom: var(--space-lg, 40px);
+}
+
+.exam-edit-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-md, 20px) 0;
+}
+
+.exam-edit-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md, 20px);
+  max-width: 800px;
+}
+
+.exam-edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.exam-edit-input {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm, 12px);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: var(--transition-fast);
+}
+
+.exam-edit-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.2);
+}
+
+.exam-edit-questions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md, 20px);
+}
+
+.exam-edit-questions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.exam-edit-question-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.exam-edit-question-form-inline {
+  margin-top: 4px;
+  margin-left: 0;
+}
+
+.exam-edit-question-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm, 12px);
+  gap: 16px;
+}
+
+.exam-edit-question-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.exam-edit-question-type {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-primary);
+  background: rgba(0, 217, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.exam-edit-question-mark {
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.exam-edit-question-text {
+  font-size: 14px;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.exam-edit-question-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-delete {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  transition: var(--transition-fast);
+}
+
+.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+}
+
+.exam-edit-question-form-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 16px);
+  padding: var(--space-md, 20px);
+  max-width: 600px;
+}
+
+.exam-edit-question-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md, 20px);
+}
+
+.exam-edit-mcq-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exam-edit-choice-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.exam-edit-choice-row .exam-edit-input {
+  flex: 1;
+}
+
+.exam-edit-correct-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-direction: row;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.btn-secondary-small {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  align-self: flex-start;
+  transition: var(--transition-fast);
+}
+
+.btn-secondary-small:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.exam-edit-form-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Cancel button: secondary, neutral style (not same as Back) */
+.btn-cancel {
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  transition: var(--transition-fast);
+}
+
+.btn-cancel:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.exam-edit-allow-multi {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.exam-edit-allow-multi input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-primary);
+  cursor: pointer;
+}
+
+/* Inline validation errors */
+.field-error {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+  display: block;
+}
+
+.exam-edit-input.has-error,
+.exam-edit-form .exam-edit-input.has-error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.3);
+}
+
+/* Success flash effect */
+.success-flash {
+  animation: successFlash 1.5s ease-out;
+}
+
+@keyframes successFlash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px rgba(16, 185, 129, 0.4);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
+.question-row-success-flash {
+  animation: rowSuccessFlash 1.2s ease-out;
+}
+
+@keyframes rowSuccessFlash {
+  0% {
+    background: rgba(16, 185, 129, 0.2);
+  }
+  100% {
+    background: transparent;
+  }
 }
