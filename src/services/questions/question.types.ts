@@ -1,6 +1,12 @@
 export type QuestionType = "MCQ" | "TF";
 
-/* ===== DB DTO ===== */
+/**
+ * DTOs aligned with DB schema:
+ * - Question: Ques_ID, Exam_ID, Ques_Text, Ques_Type, Ques_Mark
+ * - Question_MCQ: Ques_ID, Exam_ID, Allow_Multi (BIT)
+ * - Question_TF: Ques_ID, Exam_ID, Correct_Choice (BIT)
+ * - MCQ_Choice: Choice_No, Ques_ID, Exam_ID, Choice_Text, IsCorrect (BIT)
+ */
 export type QuestionDTO = {
   quesId: number;
   examId: number;
@@ -28,6 +34,8 @@ export type Question = {
   text: string;
   type: QuestionType;
   mark: number;
+  /** For MCQ: allow multiple correct choices (DB: Question_MCQ.Allow_Multi) */
+  allowMulti?: boolean;
   choices?: {
     id: number;
     text: string;

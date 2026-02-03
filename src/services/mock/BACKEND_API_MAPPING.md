@@ -23,9 +23,12 @@ When the backend APIs are ready, set `USE_MOCK = false` in `src/config/app.confi
 
 ## Questions
 
-| Mock                                            | Real API                                       | Notes                                                                                   |
-| ----------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `getQuestionsMock` (questions/question.mock.ts) | `GET /exams/:examId/questions?page=&pageSize=` | Response: `{ success, total, questions: QuestionDTO[] }`. Map DTOs in question.service. |
+Question DTOs align with DB schema: **Question** (Ques_ID, Exam_ID, Ques_Text, Ques_Type, Ques_Mark), **Question_MCQ** (Allow_Multi), **Question_TF** (Correct_Choice BIT), **MCQ_Choice** (Choice_No, Choice_Text, IsCorrect BIT).
+
+| Mock                                            | Real API                                                | Notes                                                                                   |
+| ----------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| `getQuestionsMock` (questions/question.mock.ts) | `GET /exams/:examId/questions?page=&pageSize=`          | Response: `{ success, total, questions: QuestionDTO[] }`. Map DTOs in question.service. |
+| `addQuestionMock` / `updateQuestionMock`        | `POST /exams/:examId/questions`, `PATCH /questions/:id` | Payload includes `mcq.allowMulti` for multiple correct choices.                         |
 
 ---
 

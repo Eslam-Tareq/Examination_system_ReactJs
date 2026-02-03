@@ -26,16 +26,16 @@ const LoginForm = () => {
     try {
       setError("");
       const res = await loginService(username, password);
-      console.log("res", res);
-      login(res.data.user, res.data.token.accessToken);
+      if (!res.data) {
+        setError(res.message ?? "Login failed");
+        return;
+      }
+      const { user, token } = res.data;
+      login({ ...user, role: user.role as UserRoles }, token.accessToken);
       if (res.success) {
         showToast("Login successful", "success", "Welcome", 5000);
       }
-      if (res.data.user.role === UserRoles.INSTRUCTOR) {
-        navigate("/instructor");
-      } else {
-        navigate("/student");
-      }
+      navigate("/", { replace: true });
     } catch (error: unknown) {
       console.log(error);
       setError("Username or password is incorrect");
@@ -43,41 +43,38 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="w-[520px] rounded-3xl border border-white/10 bg-white/10 backdrop-blur-xl shadow-2xl px-10 py-12 text-white">
-      {/* Logo */}
-      <div className="flex justify-center mb-10">
-        <Logo />
-      </div>
-
-      {error && (
-        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-          {error}
+    <div className="login-card">
+      <div className="login-card-inner">
+        {/* Logo */}
+        <div className="login-logo">
+          <Logo />
         </div>
-      )}
 
-      <div className="space-y-6">
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full rounded-xl border border-white/10 bg-[#0b1020]/80 px-5 py-4 text-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
+        {error && <div className="login-error">{error}</div>}
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-xl border border-white/10 bg-[#0b1020]/80 px-5 py-4 text-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
+        <div className="login-form">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="login-input"
+            autoComplete="username"
+          />
 
-        <button
-          onClick={handleLogin}
-          className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-indigo-500 py-4 text-lg font-semibold transition hover:opacity-90"
-        >
-          Login
-        </button>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="login-input"
+            autoComplete="current-password"
+          />
+
+          <button type="button" onClick={handleLogin} className="login-btn">
+            Login
+          </button>
+        </div>
       </div>
     </div>
   );

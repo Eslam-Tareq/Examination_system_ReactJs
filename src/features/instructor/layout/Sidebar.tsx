@@ -1,27 +1,43 @@
+import { NavLink } from "react-router-dom";
 import { INSTRUCTOR_NAV } from "../config/navigation.config";
 
 type Props = {
   active: string;
-  onChange: (id: string) => void;
 };
 
-const Sidebar = ({ active, onChange }: Props) => {
+const Sidebar = ({ active }: Props) => {
+  const navPaths: Record<string, string> = {
+    overview: "/instructor",
+    examinations: "/instructor/examinations",
+    courses: "/instructor/courses",
+    students: "/instructor/students",
+    submissions: "/instructor/submissions",
+  };
+
   return (
     <aside className="sidebar">
-      {/* Logo */}
       <div className="sidebar-logo">EXAMLY</div>
 
-      {/* Nav */}
       <nav className="sidebar-nav">
-        {INSTRUCTOR_NAV.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => onChange(item.id)}
-            className={`sidebar-item ${active === item.id ? "active" : ""}`}
-          >
-            {item.label}
-          </button>
-        ))}
+        {INSTRUCTOR_NAV.map((item) => {
+          const to = navPaths[item.id] ?? "/instructor";
+          const isDisabled = !["overview", "examinations"].includes(item.id);
+          return (
+            <NavLink
+              key={item.id}
+              to={isDisabled ? "#" : to}
+              end={item.id === "overview"}
+              className={({ isActive }) =>
+                `sidebar-item ${isActive ? "active" : ""} ${
+                  isDisabled ? "disabled" : ""
+                }`
+              }
+              onClick={isDisabled ? (e) => e.preventDefault() : undefined}
+            >
+              {item.label}
+            </NavLink>
+          );
+        })}
       </nav>
     </aside>
   );

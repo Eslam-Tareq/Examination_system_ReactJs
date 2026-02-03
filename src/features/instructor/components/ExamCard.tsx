@@ -3,9 +3,10 @@ import { Exam } from "@/services/examination/exam.types";
 type Props = {
   exam: Exam;
   onPreviewClick?: (exam: Exam) => void;
+  onEditClick?: (exam: Exam) => void;
 };
 
-const ExamCard = ({ exam, onPreviewClick }: Props) => {
+const ExamCard = ({ exam, onPreviewClick, onEditClick }: Props) => {
   return (
     <div className="exam-card">
       <div className="exam-card-header">
@@ -28,7 +29,11 @@ const ExamCard = ({ exam, onPreviewClick }: Props) => {
 
       <div className="exam-actions">
         {exam.status === "upcoming" && (
-          <button type="button" className="btn-edit">
+          <button
+            type="button"
+            className="btn-edit"
+            onClick={() => onEditClick?.(exam)}
+          >
             Edit
           </button>
         )}

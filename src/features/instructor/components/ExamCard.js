@@ -1,0 +1,5 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+const ExamCard = ({ exam, onPreviewClick, onEditClick }) => {
+    return (_jsxs("div", { className: "exam-card", children: [_jsxs("div", { className: "exam-card-header", children: [_jsx("h3", { className: "exam-title", children: exam.title }), _jsx("span", { className: `exam-status ${exam.status}`, children: exam.status.toUpperCase() })] }), _jsxs("div", { className: "exam-meta", children: [_jsx("span", { className: "exam-course", children: exam.courseName }), _jsx("span", { children: "\u2022" }), _jsxs("span", { children: [exam.duration, " mins"] }), _jsx("span", { children: "\u2022" }), _jsxs("span", { className: "exam-questions", children: [exam.questionsCount, " Questions"] })] }), _jsx("div", { className: "exam-date", children: exam.date }), _jsxs("div", { className: "exam-actions", children: [exam.status === "upcoming" && (_jsx("button", { type: "button", className: "btn-edit", onClick: () => onEditClick?.(exam), children: "Edit" })), _jsx("button", { type: "button", className: "btn-primary", onClick: () => onPreviewClick?.(exam), children: "Preview" })] })] }));
+};
+export default ExamCard;

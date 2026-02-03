@@ -3,6 +3,7 @@ import QuestionRenderer from "@/components/questions/QuestionRenderer";
 import { getExamQuestions } from "@/services/questions/question.service";
 import { Question } from "@/services/questions/question.types";
 import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 const QUESTIONS_PAGE_SIZE = 5;
 
@@ -15,7 +16,7 @@ function toDisplayQuestion(
       type: "MCQ",
       question: q.text,
       mark: q.mark,
-      allowMulti: false,
+      allowMulti: q.allowMulti ?? false,
       choices: q.choices ?? [],
     };
   }
@@ -28,12 +29,16 @@ function toDisplayQuestion(
 }
 
 type Props = {
-  examId: number;
+  examId?: number;
   examTitle?: string;
   onBack?: () => void;
 };
 
-const ExamPreviewPage = ({ examId, examTitle, onBack }: Props) => {
+const ExamPreviewPage = ({ examId: examIdProp, examTitle, onBack }: Props) => {
+  const { examId: examIdParam } = useParams<{ examId: string }>();
+  const navigate = useNavigate();
+  const examId = examIdProp ?? Number(examIdParam ?? 0);
+  const handleBack = onBack ?? (() => navigate("/instructor/examinations"));
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -52,16 +57,14 @@ const ExamPreviewPage = ({ examId, examTitle, onBack }: Props) => {
   return (
     <div className="exam-preview-page">
       <div className="exam-preview-header">
-        {onBack && (
-          <button
-            type="button"
-            className="btn-back"
-            onClick={onBack}
-            aria-label="Back to examinations"
-          >
-            ← Back to Examinations
-          </button>
-        )}
+        <button
+          type="button"
+          className="btn-back"
+          onClick={handleBack}
+          aria-label="Back to examinations"
+        >
+          ← Back to Examinations
+        </button>
         <h2 className="exam-preview-title">
           {examTitle ? `Preview: ${examTitle}` : "Exam Preview"}
         </h2>

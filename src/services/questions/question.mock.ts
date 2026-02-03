@@ -207,7 +207,7 @@ function buildMcq(
     type: "MCQ",
     mark: 2,
     mcq: {
-      allowMulti: false,
+      allowMulti: index % 4 === 0,
       choices: template.choices.map((c, i) => ({
         choiceNo: i + 1,
         text: c.text,
@@ -269,6 +269,21 @@ function buildAllMockQuestions(): QuestionDTO[] {
 
 const MOCK_QUESTIONS = buildAllMockQuestions();
 
+/** Session overlay for edit page: add/update/delete during session */
+const sessionAdded: QuestionDTO[] = [];
+const sessionDeletedIds = new Set<number>();
+const sessionUpdated = new Map<number, QuestionDTO>();
+let nextTempId = 100000;
+
+function getMergedQuestionsForExam(examId: number): QuestionDTO[] {
+  const base = MOCK_QUESTIONS.filter(
+    (q) => q.examId === examId && !sessionDeletedIds.has(q.quesId)
+  );
+  const updated = base.map((q) => sessionUpdated.get(q.quesId) ?? q);
+  const added = sessionAdded.filter((q) => q.examId === examId);
+  return [...updated, ...added];
+}
+
 export const getQuestionsMock = async (
   examId: number,
   page: number,
@@ -276,10 +291,125 @@ export const getQuestionsMock = async (
 ) => {
   await new Promise((r) => setTimeout(r, 300));
 
-  const filtered = MOCK_QUESTIONS.filter((q) => q.examId === examId);
+  const filtered = getMergedQuestionsForExam(examId);
   const total = filtered.length;
   const start = (page - 1) * pageSize;
   const questions = filtered.slice(start, start + pageSize);
 
   return { total, questions };
+};
+
+/** Get all questions for an exam (e.g. edit page). Same merge logic. */
+export const getAllQuestionsMock = async (
+  examId: number
+): Promise<QuestionDTO[]> => {
+  await new Promise((r) => setTimeout(r, 200));
+  return getMergedQuestionsForExam(examId);
+};
+
+export type AddQuestionPayload = {
+  text: string;
+  type: "MCQ" | "TF";
+  mark: number;
+  mcq?: {
+    allowMulti: boolean;
+    choices: { text: string; isCorrect: boolean }[];
+  };
+  tf?: { correctChoice: boolean };
+};
+
+/** Add question. Real API: POST /exams/:examId/questions */
+export const addQuestionMock = async (
+  examId: number,
+  payload: AddQuestionPayload
+): Promise<QuestionDTO> => {
+  await new Promise((r) => setTimeout(r, 300));
+  const quesId = nextTempId++;
+  const dto: QuestionDTO = {
+    quesId,
+    examId,
+    text: payload.text,
+    type: payload.type,
+    mark: payload.mark,
+    ...(payload.type === "MCQ" &&
+      payload.mcq && {
+        mcq: {
+          allowMulti: payload.mcq.allowMulti,
+          choices: payload.mcq.choices.map((c, i) => ({
+            choiceNo: i + 1,
+            text: c.text,
+            isCorrect: c.isCorrect,
+          })),
+        },
+      }),
+    ...(payload.type === "TF" &&
+      payload.tf && { tf: { correctChoice: payload.tf.correctChoice } }),
+  };
+  sessionAdded.push(dto);
+  return dto;
+};
+
+/** Update question. Real API: PATCH /questions/:id */
+export const updateQuestionMock = async (
+  quesId: number,
+  payload: Partial<AddQuestionPayload>
+): Promise<QuestionDTO | null> => {
+  await new Promise((r) => setTimeout(r, 300));
+  const inAdded = sessionAdded.find((q) => q.quesId === quesId);
+  if (inAdded) {
+    if (payload.text != null) inAdded.text = payload.text;
+    if (payload.type != null) inAdded.type = payload.type;
+    if (payload.mark != null) inAdded.mark = payload.mark;
+    if (payload.mcq != null)
+      inAdded.mcq = {
+        allowMulti: payload.mcq.allowMulti ?? false,
+        choices: payload.mcq.choices.map((c, i) => ({
+          choiceNo: i + 1,
+          text: c.text,
+          isCorrect: c.isCorrect,
+        })),
+      };
+    if (payload.tf != null)
+      inAdded.tf = { correctChoice: payload.tf.correctChoice };
+    return inAdded;
+  }
+  const fromBase = MOCK_QUESTIONS.find((q) => q.quesId === quesId);
+  if (fromBase) {
+    const updated: QuestionDTO = {
+      ...fromBase,
+      ...(payload.text != null && { text: payload.text }),
+      ...(payload.type != null && { type: payload.type }),
+      ...(payload.mark != null && { mark: payload.mark }),
+      ...(payload.mcq != null && {
+        mcq: {
+          allowMulti: payload.mcq.allowMulti ?? false,
+          choices: payload.mcq.choices.map((c, i) => ({
+            choiceNo: i + 1,
+            text: c.text,
+            isCorrect: c.isCorrect,
+          })),
+        },
+      }),
+      ...(payload.tf != null && {
+        tf: { correctChoice: payload.tf.correctChoice },
+      }),
+    };
+    sessionUpdated.set(quesId, updated);
+    return updated;
+  }
+  return null;
+};
+
+/** Delete question. Real API: DELETE /questions/:id */
+export const deleteQuestionMock = async (
+  quesId: number
+): Promise<{ success: boolean }> => {
+  await new Promise((r) => setTimeout(r, 200));
+  const inAdded = sessionAdded.findIndex((q) => q.quesId === quesId);
+  if (inAdded >= 0) {
+    sessionAdded.splice(inAdded, 1);
+    return { success: true };
+  }
+  sessionDeletedIds.add(quesId);
+  return { success: true };
 };

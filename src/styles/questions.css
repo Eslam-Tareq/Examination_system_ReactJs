@@ -13,8 +13,8 @@
 }
 
 .question-card:hover {
-  border-color: rgba(0, 217, 255, 0.3);
-  box-shadow: 0 4px 20px rgba(0, 217, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.08);
 }
 
 .question-header {

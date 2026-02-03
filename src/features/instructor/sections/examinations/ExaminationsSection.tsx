@@ -1,20 +1,20 @@
-import ExamPreviewPage from "@/features/instructor/pages/ExamPreviewPage";
 import Pagination from "@/components/pagination/Pagination";
 import { getExamsPaginated } from "@/services/examination/exam.service";
 import { Exam, ExamStatus } from "@/services/examination/exam.types";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ExamCard from "../../components/ExamCard";
 import { EXAM_TABS } from "./examinations.config";
 
 const EXAMS_PAGE_SIZE = 6;
 
 const ExaminationsSection = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<ExamStatus>("upcoming");
   const [exams, setExams] = useState<Exam[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [previewExam, setPreviewExam] = useState<Exam | null>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -30,17 +30,13 @@ const ExaminationsSection = () => {
     setPage(1);
   }, [activeTab]);
 
-  if (previewExam) {
-    return (
-      <section className="examinations-section fade-in">
-        <ExamPreviewPage
-          examId={Number(previewExam.id)}
-          examTitle={previewExam.title}
-          onBack={() => setPreviewExam(null)}
-        />
-      </section>
-    );
-  }
+  const handlePreview = (exam: Exam) => {
+    navigate(`/instructor/examinations/${exam.id}/preview`);
+  };
+
+  const handleEdit = (exam: Exam) => {
+    navigate(`/instructor/examinations/${exam.id}/edit`);
+  };
 
   return (
     <section className="examinations-section fade-in">
@@ -82,7 +78,8 @@ const ExaminationsSection = () => {
             <ExamCard
               key={exam.id}
               exam={exam}
-              onPreviewClick={setPreviewExam}
+              onPreviewClick={handlePreview}
+              onEditClick={handleEdit}
             />
           ))}
       </div>

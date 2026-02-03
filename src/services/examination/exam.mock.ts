@@ -108,3 +108,18 @@ export const getExamsMockPaginated = async (
 
   return { data, total };
 };
+
+/** Get single exam by id. Real API: GET /exams/:id */
+export const getExamByIdMock = async (id: string): Promise<ExamDTO | null> => {
+  await new Promise((res) => setTimeout(res, 300));
+  return MOCK_EXAMS.find((e) => e.id === id) ?? null;
+};
+
+/** Update exam. Real API: PATCH /exams/:id. Mock returns success; backend will persist. */
+export const updateExamMock = async (
+  id: string,
+  data: Partial<Omit<ExamDTO, "id">>
+): Promise<{ success: boolean }> => {
+  await new Promise((res) => setTimeout(res, 300));
+  return { success: true };
+};

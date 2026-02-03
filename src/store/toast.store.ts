@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ToastType = "success" | "error";
+export type ToastType = "success" | "error" | "warning";
 
 export type ToastItem = {
   id: string;
@@ -16,7 +16,7 @@ type ToastState = {
     message: string,
     type: ToastType,
     title?: string,
-    duration?: number,
+    duration?: number
   ) => void;
   removeToast: (id: string) => void;
 };

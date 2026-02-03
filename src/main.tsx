@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import "./styles/variables.css";
 import "./styles/animations.css";
 import "./styles/components/pagination.css";
+import "./styles/components/layout.css";
+import "./styles/auth.css";
 import "./styles/instructor.css";
 import "./styles/global.css";
 import App from "./App";

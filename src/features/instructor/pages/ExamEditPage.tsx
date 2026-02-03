@@ -8,7 +8,7 @@ import {
 } from "@/services/questions/question.service";
 import { Question } from "@/services/questions/question.types";
 import { useToastStore } from "@/store/toast.store";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { AddQuestionPayload } from "@/services/questions/question.service";
 
@@ -25,6 +25,7 @@ const ExamEditPage = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingExam, setSavingExam] = useState(false);
+  const [savingQuestion, setSavingQuestion] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingQId, setEditingQId] = useState<number | null>(null);
   const [form, setForm] = useState<Partial<Exam>>({});
@@ -43,6 +44,8 @@ const ExamEditPage = () => {
   const [successFlashRowId, setSuccessFlashRowId] = useState<number | null>(
     null
   );
+  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
+  const editFormRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -161,6 +164,7 @@ const ExamEditPage = () => {
       showToast("Please fix the errors below", "error", "Validation");
       return;
     }
+    setSavingQuestion(true);
     const payload: Partial<AddQuestionPayload> = {
       text: questionForm.text,
       type: questionForm.type,
@@ -188,11 +192,19 @@ const ExamEditPage = () => {
       }
     } catch {
       showToast("Failed to update question", "error");
+    } finally {
+      setSavingQuestion(false);
     }
   };
 
   const handleDeleteQuestion = async (quesId: number) => {
-    if (!window.confirm("Delete this question?")) return;
+    setDeleteConfirmId(quesId);
+  };
+
+  const confirmDeleteQuestion = async () => {
+    const quesId = deleteConfirmId;
+    if (!quesId) return;
+    setDeleteConfirmId(null);
     try {
       await deleteQuestion(quesId);
       setQuestions((prev) => prev.filter((q) => q.id !== quesId));
@@ -205,6 +217,10 @@ const ExamEditPage = () => {
 
   const openEditQuestion = (q: Question) => {
     setQuestionErrors({});
+    if (editingQId === q.id) {
+      setEditingQId(null);
+      return;
+    }
     setEditingQId(q.id);
     setQuestionForm({
       text: q.text,
@@ -222,6 +238,12 @@ const ExamEditPage = () => {
           : { allowMulti: false, choices: [{ text: "", isCorrect: false }] },
       tf: { correctChoice: q.correctTF ?? false },
     });
+    setTimeout(() => {
+      editFormRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }, 100);
   };
 
   const handleAddChoice = () => {
@@ -401,8 +423,9 @@ const ExamEditPage = () => {
             type="button"
             className="btn-primary"
             onClick={handleUpdateQuestion}
+            disabled={savingQuestion}
           >
-            Update question
+            {savingQuestion ? "Saving…" : "Update question"}
           </button>
         ) : (
           <button
@@ -429,7 +452,17 @@ const ExamEditPage = () => {
     </div>
   );
 
-  if (loading) return <p className="text-muted">Loading exam...</p>;
+  if (loading) {
+    return (
+      <div className="exam-edit-page">
+        <div className="exam-edit-loading">
+          <div className="skeleton skeleton-header" />
+          <div className="skeleton skeleton-section" />
+          <div className="skeleton skeleton-section" />
+        </div>
+      </div>
+    );
+  }
   if (!exam) return <p className="text-muted">Exam not found.</p>;
 
   return (
@@ -615,7 +648,12 @@ const ExamEditPage = () => {
 
         <ul className="exam-edit-questions-list">
           {questions.map((q) => (
-            <li key={q.id} className="exam-edit-question-list-item">
+            <li
+              key={q.id}
+              className={`exam-edit-question-list-item ${
+                editingQId === q.id ? "is-editing" : ""
+              }`}
+            >
               <div
                 className={`exam-edit-question-row ${
                   successFlashRowId === q.id ? "question-row-success-flash" : ""
@@ -646,9 +684,12 @@ const ExamEditPage = () => {
                   </button>
                 </div>
               </div>
-              {/* Edit form: shown directly below the selected question */}
+              {/* Edit form: shown directly below the selected question with slide-down */}
               {editingQId === q.id && (
-                <div className="exam-edit-question-form-section exam-edit-question-form-inline">
+                <div
+                  ref={editFormRef}
+                  className="exam-edit-question-form-section exam-edit-question-form-inline exam-edit-question-form-slide"
+                >
                   <h3 className="exam-edit-section-title">Edit question</h3>
                   {renderQuestionForm("edit")}
                 </div>
@@ -661,6 +702,37 @@ const ExamEditPage = () => {
           <p className="text-muted">No questions yet. Add one above.</p>
         )}
       </section>
+
+      {/* Delete confirmation modal */}
+      {deleteConfirmId !== null && (
+        <div
+          className="confirm-modal-overlay"
+          onClick={() => setDeleteConfirmId(null)}
+        >
+          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <h3 className="confirm-modal-title">Delete question?</h3>
+            <p className="confirm-modal-message">
+              This action cannot be undone.
+            </p>
+            <div className="confirm-modal-actions">
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={() => setDeleteConfirmId(null)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="btn-delete"
+                onClick={confirmDeleteQuestion}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

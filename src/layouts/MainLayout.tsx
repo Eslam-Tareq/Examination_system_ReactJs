@@ -1,13 +1,20 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import AppTopBar from "@/components/layout/AppTopBar";
 
 const MainLayout = () => {
-  return (
-    <div>
-      <header className="p-4 bg-slate-900 text-white">
-        Examination System
-      </header>
+  const { pathname } = useLocation();
+  const isInstructor = pathname.startsWith("/instructor");
 
-      <main className="p-4">
+  return (
+    <div className="app-shell">
+      {!isInstructor && <AppTopBar />}
+      <main
+        className={
+          isInstructor
+            ? "app-main app-main-full"
+            : "app-main app-main-with-topbar"
+        }
+      >
         <Outlet />
       </main>
     </div>

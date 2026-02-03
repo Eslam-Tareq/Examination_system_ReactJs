@@ -1,7 +1,12 @@
 import { USE_MOCK } from "@/config/app.config";
 import { Exam, ExamStatus } from "./exam.types";
 import { getExamsApi } from "./exam.api";
-import { getExamsMock, getExamsMockPaginated } from "./exam.mock";
+import {
+  getExamsMock,
+  getExamsMockPaginated,
+  getExamByIdMock,
+  updateExamMock,
+} from "./exam.mock";
 
 const mapExam = (dto: any): Exam => ({
   id: dto.id,
@@ -10,7 +15,7 @@ const mapExam = (dto: any): Exam => ({
   date: new Date(dto.date).toLocaleString(),
   duration: dto.duration,
   questionsCount: dto.questionsCount,
-  courseName: dto.course.name,
+  courseName: dto.course?.name ?? "",
 });
 
 export const getExams = async (status?: ExamStatus): Promise<Exam[]> => {
@@ -38,4 +43,31 @@ export const getExamsPaginated = async (
   const data = (res.data ?? []).map(mapExam);
   const total = res.total ?? data.length;
   return { data, total };
+};
+
+/** Get single exam by id. When backend ready: GET /exams/:id */
+export const getExamById = async (id: string): Promise<Exam | null> => {
+  if (USE_MOCK) {
+    const dto = await getExamByIdMock(id);
+    return dto ? mapExam(dto) : null;
+  }
+  // const res = await http.get(`/exams/${id}`); return res.data ? mapExam(res.data) : null;
+  return null;
+};
+
+/** Update exam. When backend ready: PATCH /exams/:id */
+export const updateExam = async (
+  id: string,
+  data: Partial<
+    Pick<
+      Exam,
+      "title" | "status" | "date" | "duration" | "questionsCount" | "courseName"
+    >
+  >
+): Promise<{ success: boolean }> => {
+  if (USE_MOCK) {
+    return updateExamMock(id, data as any);
+  }
+  // await http.patch(`/exams/${id}`, data); return { success: true };
+  return { success: false };
 };

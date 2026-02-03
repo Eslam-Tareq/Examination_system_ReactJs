@@ -1,0 +1,25 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
+import RoleGuard from "@/components/routing/RoleGuard";
+import LandingRedirect from "@/components/routing/LandingRedirect";
+import LoginPage from "@/features/auth/pages/LoginPage";
+import NotFoundPage from "@/pages/NotFoundPage";
+import AuthLayout from "@/layouts/AuthLayout";
+import MainLayout from "@/layouts/MainLayout";
+import AdminLayout from "@/layouts/AdminLayout";
+import ToastContainer from "@/components/Ui/ToastContainer";
+import InstructorLayout from "@/features/instructor/layout/InstructorLayout";
+import OverviewSection from "@/features/instructor/sections/overview/OverviewSection";
+import ExaminationsSection from "@/features/instructor/sections/examinations/ExaminationsSection";
+import ExamPreviewPage from "@/features/instructor/pages/ExamPreviewPage";
+import ExamEditPage from "@/features/instructor/pages/ExamEditPage";
+import { UserRoles } from "@/types/userRoles";
+const ExamList = () => _jsx("div", { children: "Exam List" });
+const ExamStart = () => _jsx("div", { children: "Exam Start" });
+const AdminDashboard = () => _jsx("div", { children: "Admin Dashboard" });
+const StudentDashboard = () => (_jsx("div", { className: "text-white text-2xl", children: "Student Portal" }));
+const AppRoutes = () => {
+    return (_jsxs(BrowserRouter, { children: [_jsx(ToastContainer, {}), _jsxs(Routes, { children: [_jsxs(Route, { element: _jsx(AuthLayout, {}), children: [_jsx(Route, { path: "/", element: _jsx(LandingRedirect, {}) }), _jsx(Route, { path: "/login", element: _jsx(LoginPage, {}) })] }), _jsx(Route, { element: _jsx(ProtectedRoute, { children: _jsx(RoleGuard, { allowedRoles: [UserRoles.INSTRUCTOR], children: _jsx(MainLayout, {}) }) }), children: _jsxs(Route, { path: "/instructor", element: _jsx(ProtectedRoute, { children: _jsx(InstructorLayout, {}) }), children: [_jsx(Route, { index: true, element: _jsx(OverviewSection, {}) }), _jsx(Route, { path: "examinations", element: _jsx(ExaminationsSection, {}) }), _jsx(Route, { path: "examinations/:examId/preview", element: _jsx(ExamPreviewPage, {}) }), _jsx(Route, { path: "examinations/:examId/edit", element: _jsx(ExamEditPage, {}) }), _jsx(Route, { path: "*", element: _jsx(Navigate, { to: "/instructor", replace: true }) })] }) }), _jsx(Route, { element: _jsx(ProtectedRoute, { children: _jsx(RoleGuard, { allowedRoles: [UserRoles.STUDENT], children: _jsx(MainLayout, {}) }) }), children: _jsx(Route, { path: "/student", element: _jsx(StudentDashboard, {}) }) }), _jsx(Route, { element: _jsx(ProtectedRoute, { children: _jsx(MainLayout, {}) }), children: _jsx(Route, { path: "/exam/:id", element: _jsx(ExamStart, {}) }) }), _jsx(Route, { element: _jsx(ProtectedRoute, { children: _jsx(AdminLayout, {}) }), children: _jsx(Route, { path: "/admin", element: _jsx(AdminDashboard, {}) }) }), _jsx(Route, { path: "*", element: _jsx(NotFoundPage, {}) })] })] }));
+};
+export default AppRoutes;

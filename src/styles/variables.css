@@ -1,42 +1,55 @@
 /* =========================
    Global CSS Variables
+   Design System - Examly
    ========================= */
 
 :root {
   /* Backgrounds */
-  --bg-primary: #0a0e27; /* main app background */
-  --bg-secondary: #131730; /* sidebar + header */
-  --bg-card: #1e2542; /* cards */
-  --bg-tertiary: #161c3a; /* tabs, inputs */
+  --bg-primary: #0a1628; /* dark navy - main app background */
+  --bg-secondary: #1a2332; /* lighter navy - sidebar, cards */
+  --bg-card: #1a2332; /* card background */
+  --bg-tertiary: #0f172a; /* tabs, inputs - slightly darker */
 
   /* Accent colors */
-  --accent-primary: #00d9ff; /* cyan */
-  --accent-secondary: #7b2cbf; /* purple */
-  --accent-gradient: linear-gradient(135deg, #00d9ff 0%, #7b2cbf 100%);
+  --accent-primary: #00d4ff; /* cyan - primary accent */
+  --accent-secondary: #6366f1; /* purple/blue - secondary */
+  --accent-gradient: linear-gradient(135deg, #00d4ff 0%, #6366f1 100%);
 
   /* Text */
-  --text-primary: #e8edf5; /* main text */
-  --text-secondary: #9ca3bc; /* muted text */
-  --text-muted: #6b7280; /* subtle labels */
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
 
-  /* Borders & effects */
-  --border-color: #2a3254;
+  /* Semantic colors */
   --success: #10b981;
   --success-bg: rgba(16, 185, 129, 0.15);
-  --glow-cyan: 0 0 30px rgba(0, 217, 255, 0.25);
-  --glow-purple: 0 0 30px rgba(123, 44, 191, 0.25);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.15);
+
+  /* Borders & effects */
+  --border-color: rgba(148, 163, 184, 0.15);
+  --glow-cyan: 0 0 30px rgba(0, 212, 255, 0.25);
+  --glow-purple: 0 0 30px rgba(99, 102, 241, 0.25);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
 
   /* Radius */
   --radius-sm: 12px;
   --radius-md: 16px;
   --radius-lg: 20px;
 
-  /* Spacing */
-  --space-sm: 12px;
-  --space-md: 20px;
-  --space-lg: 40px;
+  /* Spacing scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
 
   /* Transitions */
   --transition-fast: 0.2s ease;
-  --transition-base: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.3s ease;
+  --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
