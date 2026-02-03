@@ -1,1 +1,5 @@
-"use strict";
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+const CourseCard = ({ course }) => {
+    return (_jsxs("div", { className: "course-card", children: [_jsx("h3", { className: "course-card-title", children: course.Course_Name }), _jsx("div", { className: "course-card-track", children: _jsx("span", { className: "course-track-badge", children: course.Track_Name }) }), _jsxs("div", { className: "course-card-stats", children: [_jsxs("div", { className: "course-stat", children: [_jsx("span", { className: "course-stat-value", children: course.Students_Count }), _jsx("span", { className: "course-stat-label", children: "Students" })] }), _jsxs("div", { className: "course-stat", children: [_jsx("span", { className: "course-stat-value", children: course.Exams_Count }), _jsx("span", { className: "course-stat-label", children: "Exams" })] }), _jsxs("div", { className: "course-stat", children: [_jsx("span", { className: "course-stat-value", children: course.Max_Attempt }), _jsx("span", { className: "course-stat-label", children: "Attempts" })] })] }), _jsx("div", { className: "course-card-footer", children: _jsxs("span", { className: "course-last-updated", children: ["Updated ", course.Last_Updated] }) })] }));
+};
+export default CourseCard;

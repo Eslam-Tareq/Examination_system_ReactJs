@@ -1,6 +1,6 @@
 import { USE_MOCK } from "@/config/app.config";
 import { getExamsApi } from "./exam.api";
-import { getExamsMock, getExamsMockPaginated, getExamByIdMock, updateExamMock, } from "./exam.mock";
+import { getExamsMock, getExamsMockPaginated, getExamByIdMock, updateExamMock, createExamMock, } from "./exam.mock";
 const mapExam = (dto) => ({
     id: dto.id,
     title: dto.title,
@@ -45,4 +45,13 @@ export const updateExam = async (id, data) => {
     }
     // await http.patch(`/exams/${id}`, data); return { success: true };
     return { success: false };
+};
+/** Create exam. When backend ready: POST /exams */
+export const createExam = async (payload) => {
+    if (USE_MOCK) {
+        const dto = await createExamMock(payload);
+        return mapExam(dto);
+    }
+    // const res = await http.post('/exams', payload); return mapExam(res.data);
+    return null;
 };

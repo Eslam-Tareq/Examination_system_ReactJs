@@ -77,11 +77,13 @@ function makeExams(
   });
 }
 
-const MOCK_EXAMS: ExamDTO[] = [
+let MOCK_EXAMS: ExamDTO[] = [
   ...makeExams("upcoming", 1, 10, "2026-02-05T10:00:00", 2),
   ...makeExams("active", 11, 10, "2026-02-01T15:00:00", 0),
   ...makeExams("completed", 21, 10, "2026-01-28T12:00:00", -2),
 ];
+
+let nextExamId = 31;
 
 export const getExamsMock = async (status?: ExamStatus): Promise<ExamDTO[]> => {
   await new Promise((res) => setTimeout(res, 400)); // fake delay
@@ -121,5 +123,38 @@ export const updateExamMock = async (
   data: Partial<Omit<ExamDTO, "id">>
 ): Promise<{ success: boolean }> => {
   await new Promise((res) => setTimeout(res, 300));
+  const idx = MOCK_EXAMS.findIndex((e) => e.id === id);
+  if (idx >= 0) {
+    MOCK_EXAMS[idx] = { ...MOCK_EXAMS[idx], ...data };
+  }
   return { success: true };
+};
+
+export type CreateExamPayload = {
+  title: string;
+  date: string;
+  duration: number;
+  status: ExamStatus;
+  courseName: string;
+  questionsCount?: number;
+};
+
+/** Create exam. Real API: POST /exams */
+export const createExamMock = async (
+  payload: CreateExamPayload
+): Promise<ExamDTO> => {
+  await new Promise((res) => setTimeout(res, 400));
+  const id = String(nextExamId++);
+  const courseId = "CS" + (100 + (nextExamId % 5));
+  const dto: ExamDTO = {
+    id,
+    title: payload.title,
+    status: payload.status,
+    date: payload.date,
+    duration: payload.duration,
+    questionsCount: payload.questionsCount ?? 0,
+    course: { id: courseId, name: payload.courseName },
+  };
+  MOCK_EXAMS = [...MOCK_EXAMS, dto];
+  return dto;
 };

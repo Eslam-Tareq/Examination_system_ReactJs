@@ -6,6 +6,8 @@ const InstructorLayout = () => {
   const { pathname } = useLocation();
   const activeSection = pathname.startsWith("/instructor/examinations")
     ? "examinations"
+    : pathname.startsWith("/instructor/courses")
+    ? "courses"
     : "overview";
 
   return (

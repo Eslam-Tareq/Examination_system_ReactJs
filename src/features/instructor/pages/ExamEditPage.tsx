@@ -1,4 +1,6 @@
 import { getExamById, updateExam } from "@/services/examination/exam.service";
+import { getInstructorCourses } from "@/services/courses/course.service";
+import type { Course } from "@/services/courses/course.types";
 import { Exam } from "@/services/examination/exam.types";
 import {
   getAllExamQuestions,
@@ -8,6 +10,7 @@ import {
 } from "@/services/questions/question.service";
 import { Question } from "@/services/questions/question.types";
 import { useToastStore } from "@/store/toast.store";
+import { useAuthStore } from "@/store";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { AddQuestionPayload } from "@/services/questions/question.service";
@@ -19,6 +22,7 @@ const ExamEditPage = () => {
   const { examId } = useParams<{ examId: string }>();
   const navigate = useNavigate();
   const showToast = useToastStore((s) => s.showToast);
+  const user = useAuthStore((s) => s.user);
   const id = examId ?? "";
 
   const [exam, setExam] = useState<Exam | null>(null);
@@ -26,6 +30,7 @@ const ExamEditPage = () => {
   const [loading, setLoading] = useState(true);
   const [savingExam, setSavingExam] = useState(false);
   const [savingQuestion, setSavingQuestion] = useState(false);
+  const [addingQuestion, setAddingQuestion] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingQId, setEditingQId] = useState<number | null>(null);
   const [form, setForm] = useState<Partial<Exam>>({});
@@ -45,7 +50,15 @@ const ExamEditPage = () => {
     null
   );
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
+  const [courses, setCourses] = useState<Course[]>([]);
   const editFormRef = useRef<HTMLDivElement>(null);
+  const addFormRef = useRef<HTMLDivElement>(null);
+
+  const instructorId = user?.id ?? 2;
+
+  useEffect(() => {
+    getInstructorCourses(instructorId).then(setCourses);
+  }, [instructorId]);
 
   useEffect(() => {
     if (!id) return;
@@ -58,6 +71,32 @@ const ExamEditPage = () => {
       })
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        showAddForm &&
+        addFormRef.current &&
+        !addFormRef.current.contains(e.target as Node)
+      ) {
+        setShowAddForm(false);
+        setQuestionErrors({});
+      }
+      if (
+        editingQId !== null &&
+        editFormRef.current &&
+        !editFormRef.current.contains(e.target as Node)
+      ) {
+        const target = e.target as HTMLElement;
+        if (!target.closest(".exam-edit-question-row")) {
+          setEditingQId(null);
+          setQuestionErrors({});
+        }
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showAddForm, editingQId]);
 
   const validateExamForm = (): boolean => {
     const err: ExamErrors = {};
@@ -105,21 +144,44 @@ const ExamEditPage = () => {
 
   const validateQuestionForm = (): boolean => {
     const err: QuestionErrors = {};
-    if (!questionForm.text?.trim()) err.text = "Question text is required";
+    const text = questionForm.text?.trim() ?? "";
+    if (!text) err.text = "Question text is required";
+    else if (text.length < 10)
+      err.text = "Question must be at least 10 characters";
     const mark = questionForm.mark ?? 0;
-    if (mark < 1 || Number.isNaN(mark)) err.mark = "Mark must be at least 1";
+    if (mark < 1 || Number.isNaN(mark))
+      err.mark = "Points must be greater than 0";
+    if (!questionForm.type) err.type = "Please select question type";
     if (questionForm.type === "MCQ" && questionForm.mcq) {
       const choices = questionForm.mcq.choices ?? [];
-      if (choices.length < 2) err.choices = "Add at least 2 choices";
+      if (choices.length < 2) err.choices = "Add at least 2 options";
       else {
         const empty = choices.some((c) => !c.text?.trim());
-        if (empty) err.choices = "All choices must have text";
+        if (empty) err.choices = "All options must have text";
         const hasCorrect = choices.some((c) => c.isCorrect);
-        if (!hasCorrect) err.choices = "Select at least one correct choice";
+        if (!hasCorrect) err.choices = "Select at least one correct answer";
       }
+    }
+    if (questionForm.type === "TF" && questionForm.tf === undefined) {
+      err.correctAnswer = "Select correct answer (True or False)";
     }
     setQuestionErrors(err);
     return Object.keys(err).length === 0;
+  };
+
+  const isQuestionFormValid = (): boolean => {
+    const text = questionForm.text?.trim() ?? "";
+    if (!text || text.length < 10) return false;
+    const mark = questionForm.mark ?? 0;
+    if (mark < 1 || Number.isNaN(mark)) return false;
+    if (!questionForm.type) return false;
+    if (questionForm.type === "MCQ" && questionForm.mcq) {
+      const choices = questionForm.mcq.choices ?? [];
+      if (choices.length < 2) return false;
+      if (choices.some((c) => !c.text?.trim())) return false;
+      if (!choices.some((c) => c.isCorrect)) return false;
+    }
+    return true;
   };
 
   const handleAddQuestion = async () => {
@@ -129,6 +191,7 @@ const ExamEditPage = () => {
       showToast("Please fix the errors below", "error", "Validation");
       return;
     }
+    setAddingQuestion(true);
     const payload: AddQuestionPayload = {
       text: questionForm.text!,
       type: questionForm.type!,
@@ -142,6 +205,7 @@ const ExamEditPage = () => {
     try {
       const q = await addQuestion(Number(id), payload);
       setQuestions((prev) => [...prev, q]);
+      setForm((f) => ({ ...f, questionsCount: questions.length + 1 }));
       setQuestionForm({
         type: "MCQ",
         mark: 1,
@@ -154,6 +218,8 @@ const ExamEditPage = () => {
       showToast("Question added successfully", "success", "Saved");
     } catch {
       showToast("Failed to add question", "error");
+    } finally {
+      setAddingQuestion(false);
     }
   };
 
@@ -347,7 +413,7 @@ const ExamEditPage = () => {
 
       {questionForm.type === "TF" && (
         <label>
-          Correct answer
+          Correct answer (required)
           <select
             value={questionForm.tf?.correctChoice ? "true" : "false"}
             onChange={(e) =>
@@ -358,11 +424,16 @@ const ExamEditPage = () => {
                 },
               }))
             }
-            className="exam-edit-input"
+            className={`exam-edit-input ${
+              questionErrors.correctAnswer ? "has-error" : ""
+            }`}
           >
             <option value="false">False</option>
             <option value="true">True</option>
           </select>
+          {questionErrors.correctAnswer && (
+            <span className="field-error">{questionErrors.correctAnswer}</span>
+          )}
         </label>
       )}
 
@@ -432,9 +503,9 @@ const ExamEditPage = () => {
             type="button"
             className="btn-primary"
             onClick={handleAddQuestion}
-            disabled={!questionForm.text?.trim()}
+            disabled={addingQuestion}
           >
-            Add question
+            {addingQuestion ? "Adding…" : "Add question"}
           </button>
         )}
         <button
@@ -480,11 +551,11 @@ const ExamEditPage = () => {
 
       {/* Exam info form */}
       <section
-        className={`exam-edit-form-section ${
+        className={`exam-edit-form-section exam-details-section ${
           successFlash === "exam" ? "success-flash" : ""
         }`}
       >
-        <h3 className="exam-edit-section-title">Exam details</h3>
+        <h3 className="exam-edit-section-title">Exam Details</h3>
         <div className="exam-edit-form">
           <label>
             Title
@@ -559,9 +630,8 @@ const ExamEditPage = () => {
             </select>
           </label>
           <label>
-            Course name
-            <input
-              type="text"
+            Course
+            <select
               value={form.courseName ?? ""}
               onChange={(e) => {
                 setForm((f) => ({ ...f, courseName: e.target.value }));
@@ -571,7 +641,14 @@ const ExamEditPage = () => {
               className={`exam-edit-input ${
                 examErrors.courseName ? "has-error" : ""
               }`}
-            />
+            >
+              <option value="">Select course</option>
+              {courses.map((c) => (
+                <option key={c.Course_ID} value={c.Course_Name}>
+                  {c.Course_Name}
+                </option>
+              ))}
+            </select>
             {examErrors.courseName && (
               <span className="field-error">{examErrors.courseName}</span>
             )}
@@ -640,14 +717,17 @@ const ExamEditPage = () => {
 
         {/* Add question form: shown right below "+ Add question" button */}
         {showAddForm && (
-          <div className="exam-edit-question-form-section exam-edit-question-form-inline">
+          <div
+            ref={addFormRef}
+            className="exam-edit-question-form-section exam-edit-question-form-inline exam-edit-question-form-slide"
+          >
             <h3 className="exam-edit-section-title">New question</h3>
             {renderQuestionForm("add")}
           </div>
         )}
 
         <ul className="exam-edit-questions-list">
-          {questions.map((q) => (
+          {questions.map((q, index) => (
             <li
               key={q.id}
               className={`exam-edit-question-list-item ${
@@ -659,6 +739,7 @@ const ExamEditPage = () => {
                   successFlashRowId === q.id ? "question-row-success-flash" : ""
                 }`}
               >
+                <span className="exam-edit-question-number">#{index + 1}</span>
                 <div className="exam-edit-question-info">
                   <span className="exam-edit-question-type">{q.type}</span>
                   <span className="exam-edit-question-mark">{q.mark} pt</span>

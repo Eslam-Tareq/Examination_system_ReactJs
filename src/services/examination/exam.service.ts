@@ -6,7 +6,11 @@ import {
   getExamsMockPaginated,
   getExamByIdMock,
   updateExamMock,
+  createExamMock,
 } from "./exam.mock";
+import type { CreateExamPayload } from "./exam.mock";
+
+export type { CreateExamPayload };
 
 const mapExam = (dto: any): Exam => ({
   id: dto.id,
@@ -70,4 +74,16 @@ export const updateExam = async (
   }
   // await http.patch(`/exams/${id}`, data); return { success: true };
   return { success: false };
+};
+
+/** Create exam. When backend ready: POST /exams */
+export const createExam = async (
+  payload: CreateExamPayload
+): Promise<Exam | null> => {
+  if (USE_MOCK) {
+    const dto = await createExamMock(payload);
+    return mapExam(dto);
+  }
+  // const res = await http.post('/exams', payload); return mapExam(res.data);
+  return null;
 };

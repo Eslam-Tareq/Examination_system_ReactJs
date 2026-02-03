@@ -48,7 +48,11 @@ const ExaminationsSection = () => {
           </p>
         </div>
 
-        <button type="button" className="btn-primary">
+        <button
+          type="button"
+          className="btn-primary"
+          onClick={() => navigate("/instructor/examinations/create")}
+        >
           + Create Exam
         </button>
       </div>

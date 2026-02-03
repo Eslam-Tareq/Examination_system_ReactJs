@@ -21,7 +21,9 @@ const Sidebar = ({ active }: Props) => {
       <nav className="sidebar-nav">
         {INSTRUCTOR_NAV.map((item) => {
           const to = navPaths[item.id] ?? "/instructor";
-          const isDisabled = !["overview", "examinations"].includes(item.id);
+          const isDisabled = !["overview", "examinations", "courses"].includes(
+            item.id
+          );
           return (
             <NavLink
               key={item.id}
