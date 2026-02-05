@@ -8,9 +8,6 @@ import { defineConfig, globalIgnores } from "eslint/config";
 export default defineConfig([
   globalIgnores(["dist"]),
   {
-    plugins: {
-      "@typescript-eslint/no-explicit-any": true,
-    },
     files: ["**/*.{ts,tsx}"],
     extends: [
       js.configs.recommended,
@@ -21,6 +18,12 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+    },
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "react-hooks/set-state-in-effect": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
 ]);

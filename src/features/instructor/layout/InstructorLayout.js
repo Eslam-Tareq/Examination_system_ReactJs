@@ -8,7 +8,11 @@ const InstructorLayout = () => {
         ? "examinations"
         : pathname.startsWith("/instructor/courses")
             ? "courses"
-            : "overview";
+            : pathname.startsWith("/instructor/students")
+                ? "students"
+                : pathname.startsWith("/instructor/submissions")
+                    ? "submissions"
+                    : "overview";
     return (_jsxs("div", { className: "instructor-root", children: [_jsx(Sidebar, { active: activeSection }), _jsxs("div", { className: "instructor-main", children: [_jsx(Header, { activeSection: activeSection }), _jsx("main", { className: "instructor-content fade-in", children: _jsx(Outlet, {}) })] })] }));
 };
 export default InstructorLayout;

@@ -12,12 +12,12 @@ import InstructorLayout from "@/features/instructor/layout/InstructorLayout";
 import OverviewSection from "@/features/instructor/sections/overview/OverviewSection";
 import ExaminationsSection from "@/features/instructor/sections/examinations/ExaminationsSection";
 import CoursesSection from "@/features/instructor/sections/courses/CoursesSection";
+import StudentsSection from "@/features/instructor/sections/students/StudentsSection";
 import ExamPreviewPage from "@/features/instructor/pages/ExamPreviewPage";
 import ExamEditPage from "@/features/instructor/pages/ExamEditPage";
 import CreateExamPage from "@/features/instructor/pages/CreateExamPage";
 import { UserRoles } from "@/types/userRoles";
 
-const ExamList = () => <div>Exam List</div>;
 const ExamStart = () => <div>Exam Start</div>;
 const AdminDashboard = () => <div>Admin Dashboard</div>;
 const StudentDashboard = () => (
@@ -57,6 +57,7 @@ const AppRoutes = () => {
             <Route path="examinations" element={<ExaminationsSection />} />
             <Route path="examinations/create" element={<CreateExamPage />} />
             <Route path="courses" element={<CoursesSection />} />
+            <Route path="students" element={<StudentsSection />} />
             <Route
               path="examinations/:examId/preview"
               element={<ExamPreviewPage />}

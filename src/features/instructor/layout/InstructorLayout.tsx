@@ -8,6 +8,10 @@ const InstructorLayout = () => {
     ? "examinations"
     : pathname.startsWith("/instructor/courses")
     ? "courses"
+    : pathname.startsWith("/instructor/students")
+    ? "students"
+    : pathname.startsWith("/instructor/submissions")
+    ? "submissions"
     : "overview";
 
   return (

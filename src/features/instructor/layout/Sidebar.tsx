@@ -5,7 +5,7 @@ type Props = {
   active: string;
 };
 
-const Sidebar = ({ active }: Props) => {
+const Sidebar = ({ active: _active }: Props) => {
   const navPaths: Record<string, string> = {
     overview: "/instructor",
     examinations: "/instructor/examinations",
@@ -21,9 +21,12 @@ const Sidebar = ({ active }: Props) => {
       <nav className="sidebar-nav">
         {INSTRUCTOR_NAV.map((item) => {
           const to = navPaths[item.id] ?? "/instructor";
-          const isDisabled = !["overview", "examinations", "courses"].includes(
-            item.id
-          );
+          const isDisabled = ![
+            "overview",
+            "examinations",
+            "courses",
+            "students",
+          ].includes(item.id);
           return (
             <NavLink
               key={item.id}

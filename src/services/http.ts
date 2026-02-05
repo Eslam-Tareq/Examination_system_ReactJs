@@ -3,7 +3,7 @@ import { storage } from "@/utils/storage";
 import { useToastStore } from "@/store/toast.store";
 
 const http = axios.create({
-  //@ts-ignore
+// @ts-expect-error
   baseURL: import.meta.env.VITE_API_URL || "",
   headers: {
     "Content-Type": "application/json",
