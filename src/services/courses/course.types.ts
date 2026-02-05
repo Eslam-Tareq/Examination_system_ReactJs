@@ -7,4 +7,6 @@ export type Course = {
   Students_Count: number;
   Exams_Count: number;
   Last_Updated: string;
+  Passing_Grade: number;
+  Topics: { Topic_ID: number; Topic_Name: string }[];
 };

@@ -1285,6 +1285,55 @@ body {
   box-shadow: 0 4px 12px rgba(0, 212, 255, 0.4);
 }
 
+.course-card-topics.topics-collapsed {
+  max-height: 64px;
+  overflow: hidden;
+}
+.course-card-topics.topics-expanded {
+  max-height: 500px;
+  transition: max-height 0.3s ease;
+}
+.topic-pill {
+  opacity: 0;
+  animation: topicIn 0.25s ease-out forwards;
+}
+@keyframes topicIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.topics-view-all {
+  color: var(--accent-primary);
+  cursor: pointer;
+}
+.topics-view-all:hover {
+  text-decoration: underline;
+}
+.topics-popover {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(6px);
+  z-index: 10;
+  animation: modalFadeIn 0.2s ease-out;
+}
+.topics-popover-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 @media (max-width: 768px) {
   .courses-grid {
     grid-template-columns: 1fr;

@@ -74,11 +74,11 @@ const lastNames = [
 const randomInt = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-const randomChoice = <T>(arr: T[]): T =>
+const randomChoice = <T,>(arr: T[]): T =>
   arr[Math.floor(Math.random() * arr.length)];
 
 const phoneFor = (id: number) => {
-  const base = 1000000 + ((id * 53) % 9000000);
+  const base = 1000000 + (id * 53) % 9000000;
   const prefix = ["010", "011", "012", "015"][id % 4];
   return `${prefix}${base}`;
 };
@@ -117,7 +117,9 @@ const enrollments: StudentCourse[] = students.map((s, idx) => {
   const courseId = courseIds[idx % courseIds.length];
   const used = randomInt(1, 3);
   const grade = randomInt(60, 100);
-  const status: StudentCourse["Status"] = grade >= 60 ? "Success" : "Fail";
+  const course = mockCourses.find((c) => c.Course_ID === courseId)!;
+  const status: StudentCourse["Status"] =
+    grade >= course.Passing_Grade ? "Success" : "Fail";
   return {
     Stud_ID: s.Stud_ID,
     Course_ID: courseId,

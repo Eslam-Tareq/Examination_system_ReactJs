@@ -1,3 +1,81 @@
+const TOPICS_MASTER = [
+    // Programming Fundamentals
+    { Topic_ID: 1, Topic_Name: "Variables and Data Types" },
+    { Topic_ID: 2, Topic_Name: "Control Structures" },
+    { Topic_ID: 3, Topic_Name: "Loops and Iteration" },
+    { Topic_ID: 4, Topic_Name: "Functions and Methods" },
+    { Topic_ID: 5, Topic_Name: "Arrays and Collections" },
+    { Topic_ID: 6, Topic_Name: "Object-Oriented Programming" },
+    { Topic_ID: 7, Topic_Name: "Exception Handling" },
+    // Data Structures
+    { Topic_ID: 8, Topic_Name: "Linked Lists" },
+    { Topic_ID: 9, Topic_Name: "Stacks and Queues" },
+    { Topic_ID: 10, Topic_Name: "Trees and Binary Trees" },
+    { Topic_ID: 11, Topic_Name: "Graphs" },
+    { Topic_ID: 12, Topic_Name: "Hash Tables" },
+    { Topic_ID: 13, Topic_Name: "Heaps" },
+    { Topic_ID: 14, Topic_Name: "Advanced Data Structures" },
+    // Algorithms
+    { Topic_ID: 15, Topic_Name: "Sorting Algorithms" },
+    { Topic_ID: 16, Topic_Name: "Searching Algorithms" },
+    { Topic_ID: 17, Topic_Name: "Recursion" },
+    { Topic_ID: 18, Topic_Name: "Dynamic Programming" },
+    { Topic_ID: 19, Topic_Name: "Greedy Algorithms" },
+    { Topic_ID: 20, Topic_Name: "Graph Algorithms" },
+    { Topic_ID: 21, Topic_Name: "Algorithm Complexity" },
+    // Operating Systems
+    { Topic_ID: 22, Topic_Name: "Process Management" },
+    { Topic_ID: 23, Topic_Name: "Memory Management" },
+    { Topic_ID: 24, Topic_Name: "File Systems" },
+    { Topic_ID: 25, Topic_Name: "CPU Scheduling" },
+    { Topic_ID: 26, Topic_Name: "Deadlocks" },
+    { Topic_ID: 27, Topic_Name: "Virtual Memory" },
+    { Topic_ID: 28, Topic_Name: "I/O Systems" },
+    // Databases
+    { Topic_ID: 29, Topic_Name: "SQL Fundamentals" },
+    { Topic_ID: 30, Topic_Name: "Database Design" },
+    { Topic_ID: 31, Topic_Name: "Normalization" },
+    { Topic_ID: 32, Topic_Name: "Transactions" },
+    { Topic_ID: 33, Topic_Name: "Indexes" },
+    { Topic_ID: 34, Topic_Name: "Query Optimization" },
+    { Topic_ID: 35, Topic_Name: "NoSQL Databases" },
+    // Web Development
+    { Topic_ID: 36, Topic_Name: "HTML/CSS Basics" },
+    { Topic_ID: 37, Topic_Name: "JavaScript Fundamentals" },
+    { Topic_ID: 38, Topic_Name: "Frontend Frameworks" },
+    { Topic_ID: 39, Topic_Name: "Backend Development" },
+    { Topic_ID: 40, Topic_Name: "REST APIs" },
+    { Topic_ID: 41, Topic_Name: "Authentication" },
+    { Topic_ID: 42, Topic_Name: "Deployment" },
+    // Networking
+    { Topic_ID: 43, Topic_Name: "Network Protocols" },
+    { Topic_ID: 44, Topic_Name: "TCP/IP Model" },
+    { Topic_ID: 45, Topic_Name: "Network Security" },
+    { Topic_ID: 46, Topic_Name: "Routing" },
+    { Topic_ID: 47, Topic_Name: "Subnetting" },
+    { Topic_ID: 48, Topic_Name: "Network Devices" },
+    // Machine Learning
+    { Topic_ID: 49, Topic_Name: "Supervised Learning" },
+    { Topic_ID: 50, Topic_Name: "Unsupervised Learning" },
+    { Topic_ID: 51, Topic_Name: "Neural Networks" },
+    { Topic_ID: 52, Topic_Name: "Feature Engineering" },
+    { Topic_ID: 53, Topic_Name: "Model Evaluation" },
+    { Topic_ID: 54, Topic_Name: "Deep Learning" },
+    // Cybersecurity
+    { Topic_ID: 55, Topic_Name: "Encryption" },
+    { Topic_ID: 56, Topic_Name: "Authentication Protocols" },
+    { Topic_ID: 57, Topic_Name: "Vulnerability Assessment" },
+    { Topic_ID: 58, Topic_Name: "Penetration Testing" },
+    { Topic_ID: 59, Topic_Name: "Security Best Practices" },
+    // Mobile Development
+    { Topic_ID: 60, Topic_Name: "Mobile UI/UX" },
+    { Topic_ID: 61, Topic_Name: "Platform-Specific Development" },
+    { Topic_ID: 62, Topic_Name: "Cross-Platform Frameworks" },
+    { Topic_ID: 63, Topic_Name: "Mobile APIs" },
+];
+const topics = (...names) => names
+    .map((n) => TOPICS_MASTER.find((t) => t.Topic_Name === n))
+    .filter(Boolean);
 export const mockCourses = [
     {
         Course_ID: 1,
@@ -8,6 +86,8 @@ export const mockCourses = [
         Students_Count: 45,
         Exams_Count: 8,
         Last_Updated: "2026-01-28",
+        Passing_Grade: 75,
+        Topics: topics("Process Management", "Memory Management", "File Systems", "CPU Scheduling", "Deadlocks", "Virtual Memory", "I/O Systems"),
     },
     {
         Course_ID: 2,
@@ -18,6 +98,8 @@ export const mockCourses = [
         Students_Count: 52,
         Exams_Count: 12,
         Last_Updated: "2026-01-30",
+        Passing_Grade: 70,
+        Topics: topics("Arrays and Collections", "Linked Lists", "Stacks and Queues", "Trees and Binary Trees", "Hash Tables", "Heaps", "Graphs"),
     },
     {
         Course_ID: 3,
@@ -28,6 +110,8 @@ export const mockCourses = [
         Students_Count: 38,
         Exams_Count: 10,
         Last_Updated: "2026-02-01",
+        Passing_Grade: 75,
+        Topics: topics("Sorting Algorithms", "Searching Algorithms", "Recursion", "Dynamic Programming", "Greedy Algorithms", "Graph Algorithms", "Algorithm Complexity"),
     },
     {
         Course_ID: 4,
@@ -38,6 +122,8 @@ export const mockCourses = [
         Students_Count: 48,
         Exams_Count: 9,
         Last_Updated: "2026-01-25",
+        Passing_Grade: 70,
+        Topics: topics("SQL Fundamentals", "Database Design", "Normalization", "Transactions", "Indexes", "Query Optimization", "NoSQL Databases"),
     },
     {
         Course_ID: 5,
@@ -48,6 +134,8 @@ export const mockCourses = [
         Students_Count: 67,
         Exams_Count: 15,
         Last_Updated: "2026-02-02",
+        Passing_Grade: 65,
+        Topics: topics("HTML/CSS Basics", "JavaScript Fundamentals", "Frontend Frameworks", "Backend Development", "REST APIs", "Authentication", "Deployment"),
     },
     {
         Course_ID: 6,
@@ -58,6 +146,8 @@ export const mockCourses = [
         Students_Count: 41,
         Exams_Count: 6,
         Last_Updated: "2026-01-29",
+        Passing_Grade: 75,
+        Topics: topics("Supervised Learning", "Unsupervised Learning", "Neural Networks", "Feature Engineering", "Model Evaluation", "Deep Learning"),
     },
     {
         Course_ID: 7,
@@ -68,6 +158,8 @@ export const mockCourses = [
         Students_Count: 35,
         Exams_Count: 7,
         Last_Updated: "2026-01-27",
+        Passing_Grade: 75,
+        Topics: topics("Encryption", "Authentication Protocols", "Network Security", "Vulnerability Assessment", "Penetration Testing", "Security Best Practices"),
     },
     {
         Course_ID: 8,
@@ -78,6 +170,8 @@ export const mockCourses = [
         Students_Count: 44,
         Exams_Count: 11,
         Last_Updated: "2026-02-01",
+        Passing_Grade: 65,
+        Topics: topics("Mobile UI/UX", "Platform-Specific Development", "Cross-Platform Frameworks", "Mobile APIs", "JavaScript Fundamentals", "Deployment"),
     },
     {
         Course_ID: 9,
@@ -88,6 +182,8 @@ export const mockCourses = [
         Students_Count: 39,
         Exams_Count: 5,
         Last_Updated: "2026-01-31",
+        Passing_Grade: 70,
+        Topics: topics("Backend Development", "REST APIs", "Authentication", "Deployment", "Network Protocols", "TCP/IP Model", "Routing", "Subnetting"),
     },
     {
         Course_ID: 10,
@@ -98,5 +194,7 @@ export const mockCourses = [
         Students_Count: 56,
         Exams_Count: 13,
         Last_Updated: "2026-02-03",
+        Passing_Grade: 70,
+        Topics: topics("Object-Oriented Programming", "Exception Handling", "Database Design", "Frontend Frameworks", "Backend Development", "Authentication", "Deployment"),
     },
 ];
