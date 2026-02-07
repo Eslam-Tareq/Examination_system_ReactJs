@@ -114,34 +114,66 @@ const StudentsSection = () => {
           <p className="courses-empty">No students found</p>
         ) : (
           <>
-            <div className="exam-list">
+            <div className="student-list-grid">
               {paged.map((s) => (
-                <div key={s.Stud_ID} className="exam-card">
-                  <div className="exam-card-header">
-                    <div className="exam-title">{s.Name}</div>
+                <div
+                  key={s.Stud_ID}
+                  className={`student-card-modern ${
+                    s.Status === "Success" ? "status-success" : "status-fail"
+                  }`}
+                >
+                  {/* Header */}
+                  <div className="student-header">
+                    <div className="student-identity">
+                      <div className="student-name">{s.Name}</div>
+                      <div className="student-id-wrapper">
+                        <span className="student-id-badge">ID: {s.Stud_ID}</span>
+                        <span className="student-id-badge">
+                          Track: {s.Track_Name}
+                        </span>
+                      </div>
+                    </div>
                     <span
-                      className={`exam-status ${
+                      className={`student-status-badge ${
                         s.Status === "Success" ? "success" : "fail"
                       }`}
                     >
                       {s.Status}
                     </span>
                   </div>
-                  <div className="exam-meta">
-                    <span className="exam-course">{s.Course_Name}</span>
-                    <span className="exam-questions">Grade: {s.Highest_Grade}%</span>
-                    <span className="exam-date">Attempts used: {s.Used_Attempt}</span>
-                  </div>
-                  <div className="exam-actions">
-                    <button type="button" className="action-btn secondary">
-                      {s.Email}
-                    </button>
-                    <button type="button" className="action-btn secondary">
-                      {s.Phone}
-                    </button>
-                    <button type="button" className="action-btn secondary">
-                      {s.Track_Name}
-                    </button>
+
+                  {/* Info Grid */}
+                  <div className="student-info-grid">
+                    <div className="student-info-item">
+                      <span className="student-label">Contact Info</span>
+                      <div className="student-contact">
+                        <span className="student-value">
+                          Email: {s.Email}
+                        </span>
+                        <span className="student-value">
+                          Phone: {s.Phone}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="student-info-item">
+                      <span className="student-label">Course Performance</span>
+                      <div className="flex flex-col gap-1">
+                        <span className="student-value highlight">
+                          Course: {s.Course_Name}
+                        </span>
+                        <span className="student-value">
+                          Highest Grade: {s.Highest_Grade}%
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="student-info-item">
+                      <span className="student-label">Engagement</span>
+                      <span className="student-value">
+                        Attempts Used: {s.Used_Attempt}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}
