@@ -1706,8 +1706,48 @@ body {
   margin-bottom: 0;
 }
 
+
+/* Labels for Submission Card */
+.submission-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 6px;
+}
+
+.submission-label.course { color: #f59e0b; } /* Orange */
+.submission-label.exam { color: #00d4ff; display: block; margin-bottom: 4px; font-size: 0.7rem; } /* Cyan */
+.submission-label.student { color: #10b981; } /* Emerald */
+.submission-label.id { color: #a855f7; } /* Purple */
+.submission-label.track { color: #ec4899; } /* Pink */
+
+
 .stat-value {
   font-size: 1.2rem; /* Slightly smaller value to fit */
   font-weight: 700;
   line-height: 1.2;
 }
+
+/* Utility Classes for View Submission Page */
+.bg-bg-primary { background-color: var(--bg-primary); }
+.bg-bg-secondary { background-color: var(--bg-secondary); }
+.bg-bg-tertiary { background-color: var(--bg-tertiary); }
+
+.text-accent-primary { color: var(--accent-primary); }
+.text-accent-secondary { color: var(--accent-secondary); }
+.text-text-secondary { color: var(--text-secondary); }
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
+
+.border-success { border-color: var(--success); }
+.border-danger { border-color: var(--danger); }
+.border-white\/5 { border-color: rgba(255, 255, 255, 0.05); }
+.border-white\/10 { border-color: rgba(255, 255, 255, 0.1); }
+
+.bg-success\/5 { background-color: rgba(16, 185, 129, 0.05); }
+.bg-danger\/5 { background-color: rgba(239, 68, 68, 0.05); }
+.bg-success\/10 { background-color: rgba(16, 185, 129, 0.1); }
+.bg-danger\/10 { background-color: rgba(239, 68, 68, 0.1); }
+.border-success\/20 { border-color: rgba(16, 185, 129, 0.2); }
+.border-danger\/20 { border-color: rgba(239, 68, 68, 0.2); }

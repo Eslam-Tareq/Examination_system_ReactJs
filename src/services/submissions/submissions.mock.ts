@@ -1,5 +1,5 @@
 import { mockSubmissions } from "./mockSubmissionsData";
-import { Submission, SubmissionFilters, SubmissionSortOption, SubmissionStats } from "./submissions.types";
+import { Submission, SubmissionFilters, SubmissionSortOption, SubmissionStats, SubmissionDetail, QuestionResult } from "./submissions.types";
 
 export const submissionMockService = {
   // Get all submissions for instructor
@@ -115,9 +115,82 @@ export const submissionMockService = {
     return mockSubmissions.filter((s) => s.Exam_ID === examId);
   },
 
+
   // Get submissions by course
   getCourseSubmissions: async (courseId: number): Promise<Submission[]> => {
     await new Promise((resolve) => setTimeout(resolve, 300));
     return mockSubmissions.filter((s) => s.Course_ID === courseId);
   },
+
+  // Get submission with detailed answers
+  getSubmissionWithAnswers: async (submissionId: number): Promise<SubmissionDetail> => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    
+    const submission = mockSubmissions.find(s => s.Submission_ID === submissionId);
+    if (!submission) throw new Error("Submission not found");
+
+    // Dynamic import to avoid circular dependency issues if any, or just standard import
+    // Assuming relative path to questions mock
+    const { getAllQuestionsMock } = await import("../questions/question.mock");
+    const questions = await getAllQuestionsMock(submission.Exam_ID);
+    
+    // Deterministic answer generation based on grade
+    const grade = submission.Grade || 0;
+    const totalQuestions = questions.length;
+    // Simple logic: first N questions are correct to match grade percentage roughly
+    const correctCount = Math.round((grade / 100) * totalQuestions);
+    
+    // Create detailed questions
+    const detailedQuestions: QuestionResult[] = questions.map((q, index) => {
+        const isCorrect = index < correctCount;
+        let studentAnswer: string | number | boolean;
+
+        if (q.type === "MCQ") {
+             const correctChoice = q.mcq?.choices.find(c => c.isCorrect);
+             const wrongChoices = q.mcq?.choices.filter(c => !c.isCorrect) || [];
+             
+             if (isCorrect) {
+                 studentAnswer = correctChoice?.choiceNo || 1;
+             } else {
+                 // Pick deterministic wrong answer
+                 studentAnswer = wrongChoices.length > 0 
+                    ? wrongChoices[index % wrongChoices.length].choiceNo 
+                    : (correctChoice?.choiceNo || 1); // Fallback
+             }
+        } else {
+            // TF
+            const correctVal = q.tf?.correctChoice || false;
+            studentAnswer = isCorrect ? correctVal : !correctVal;
+        }
+
+        return {
+            Ques_ID: q.quesId,
+            Exam_ID: q.examId,
+            Ques_Text: q.text,
+            Ques_Type: q.type,
+            Ques_Mark: q.mark,
+            Choices: q.mcq?.choices.map(c => ({
+                Choice_No: c.choiceNo,
+                Choice_Text: c.text,
+                IsCorrect: c.isCorrect
+            })),
+            Correct_Choice: q.tf?.correctChoice,
+            Student_Answer: studentAnswer,
+            Is_Correct: isCorrect,
+            Points_Earned: isCorrect ? q.mark : 0
+        };
+    });
+
+    const totalPoints = detailedQuestions.reduce((sum, q) => sum + q.Ques_Mark, 0);
+    const earnedPoints = detailedQuestions.reduce((sum, q) => sum + q.Points_Earned, 0);
+
+    return {
+        ...submission,
+        Questions: detailedQuestions,
+        Total_Questions: totalQuestions,
+        Correct_Answers: correctCount,
+        Total_Points: totalPoints,
+        Points_Earned: earnedPoints
+    };
+  }
 };

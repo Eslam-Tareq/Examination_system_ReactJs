@@ -34,13 +34,17 @@ export const SubmissionCard = ({ submission, onView }: SubmissionCardProps) => {
       <div className="submission-header">
         <div className="flex items-center gap-2 mb-1">
           <BookOpen size={14} className="text-secondary" />
-          <span className="text-xs uppercase font-bold text-muted tracking-wider">
+          <span className="text-xs font-bold text-white tracking-wider">
+            <span className="submission-label course">Course:</span>
             {submission.Course_Name}
           </span>
         </div>
-        <h3 className="text-lg font-bold text-white leading-tight">
-          {submission.Exam_Title}
-        </h3>
+        <div>
+          <span className="submission-label exam">Exam Title:</span>
+          <h3 className="text-lg font-bold text-white leading-tight">
+            {submission.Exam_Title}
+          </h3>
+        </div>
       </div>
 
       <div className="submission-body">
@@ -49,13 +53,20 @@ export const SubmissionCard = ({ submission, onView }: SubmissionCardProps) => {
           <div className="flex items-center gap-2 mb-1">
             <User size={16} className="text-accent-secondary" />
             <span className="font-semibold text-white">
+              <span className="submission-label student">Student:</span>
               {submission.Student_Name}
             </span>
           </div>
           <div className="flex gap-3 text-sm text-secondary pl-6">
-            <span>ID: {submission.Stud_ID}</span>
+            <span>
+              <span className="submission-label id">ID:</span>
+              {submission.Stud_ID}
+            </span>
             <span>•</span>
-            <span>{submission.Track_Name}</span>
+            <span>
+              <span className="submission-label track">Track:</span>
+              {submission.Track_Name}
+            </span>
           </div>
         </div>
 

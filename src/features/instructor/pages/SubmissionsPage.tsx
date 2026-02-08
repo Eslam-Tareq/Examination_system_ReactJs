@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Submission,
   SubmissionFilters,
@@ -11,6 +12,7 @@ import { SubmissionList } from "../components/submissions/SubmissionList";
 import { useAuthStore } from "@/store";
 
 export const SubmissionsPage = () => {
+  const navigate = useNavigate();
   // State
   const { user } = useAuthStore();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
@@ -122,9 +124,7 @@ export const SubmissionsPage = () => {
   }, [submissions, filters.courseId]);
 
   const handleViewSubmission = (submission: Submission) => {
-    // Navigate to details or open modal
-    console.log("View submission:", submission);
-    // TODO: Implement view modal or navigation
+    navigate(`/instructor/submissions/${submission.Submission_ID}`);
   };
 
   if (loading) {

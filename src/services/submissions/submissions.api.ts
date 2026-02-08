@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Submission, SubmissionFilters, SubmissionSortOption, SubmissionStats } from "./submissions.types";
+import { Submission, SubmissionFilters, SubmissionSortOption, SubmissionStats, SubmissionDetail, QuestionResult } from "./submissions.types";
 import { storage } from "@/utils/storage";
 
 // @ts-expect-error
@@ -193,6 +193,42 @@ export const submissionApiService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching course submissions:", error);
+      throw error;
+    }
+  },
+
+  // Get submission with detailed answers
+  getSubmissionWithAnswers: async (submissionId: number): Promise<SubmissionDetail> => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/submissions/${submissionId}/details`,
+        {
+          headers: {
+            Authorization: `Bearer ${storage.getToken()}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching submission details:", error);
+      throw error;
+    }
+  },
+
+  // Get submission answers (questions + student answers)
+  getSubmissionAnswers: async (submissionId: number): Promise<QuestionResult[]> => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/submissions/${submissionId}/answers`,
+        {
+          headers: {
+            Authorization: `Bearer ${storage.getToken()}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching submission answers:", error);
       throw error;
     }
   },

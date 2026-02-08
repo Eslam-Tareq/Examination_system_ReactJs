@@ -41,3 +41,28 @@ export interface SubmissionStats {
   pending: number;
   avgGrade: number; // or string representation "85.50"
 }
+
+export interface QuestionResult {
+  Ques_ID: number;
+  Exam_ID: number;
+  Ques_Text: string;
+  Ques_Type: "MCQ" | "TF";
+  Ques_Mark: number;
+  Choices?: {
+    Choice_No: number;
+    Choice_Text: string;
+    IsCorrect: boolean;
+  }[];
+  Correct_Choice?: boolean; // For TF
+  Student_Answer: number | boolean | string; // Choice_No for MCQ, boolean for TF
+  Is_Correct: boolean;
+  Points_Earned: number;
+}
+
+export interface SubmissionDetail extends Submission {
+  Questions: QuestionResult[];
+  Total_Questions: number;
+  Correct_Answers: number;
+  Total_Points: number;
+  Points_Earned: number;
+}
