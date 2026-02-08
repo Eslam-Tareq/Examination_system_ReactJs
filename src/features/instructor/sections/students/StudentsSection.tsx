@@ -127,9 +127,13 @@ const StudentsSection = () => {
                     <div className="student-identity">
                       <div className="student-name">{s.Name}</div>
                       <div className="student-id-wrapper">
-                        <span className="student-id-badge">ID: {s.Stud_ID}</span>
                         <span className="student-id-badge">
-                          Track: {s.Track_Name}
+                          <span className="header-key">ID:</span>
+                          <span className="header-val">{s.Stud_ID}</span>
+                        </span>
+                        <span className="student-id-badge">
+                          <span className="header-key">Track:</span>
+                          <span className="header-val">{s.Track_Name}</span>
                         </span>
                       </div>
                     </div>
@@ -145,34 +149,43 @@ const StudentsSection = () => {
                   {/* Info Grid */}
                   <div className="student-info-grid">
                     <div className="student-info-item">
-                      <span className="student-label">Contact Info</span>
-                      <div className="student-contact">
-                        <span className="student-value">
-                          Email: {s.Email}
-                        </span>
-                        <span className="student-value">
-                          Phone: {s.Phone}
-                        </span>
+                      <span className="student-label label-contact">Contact Info</span>
+                      <div className="flex flex-col gap-1 mt-1">
+                        <div className="student-info-row">
+                          <span className="student-key">Email:</span>
+                          <span className="student-val">{s.Email}</span>
+                        </div>
+                        <div className="student-info-row">
+                          <span className="student-key">Phone:</span>
+                          <span className="student-val">{s.Phone}</span>
+                        </div>
                       </div>
                     </div>
 
                     <div className="student-info-item">
-                      <span className="student-label">Course Performance</span>
-                      <div className="flex flex-col gap-1">
-                        <span className="student-value highlight">
-                          Course: {s.Course_Name}
-                        </span>
-                        <span className="student-value">
-                          Highest Grade: {s.Highest_Grade}%
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="student-info-item">
-                      <span className="student-label">Engagement</span>
-                      <span className="student-value">
-                        Attempts Used: {s.Used_Attempt}
+                      <span className="student-label label-performance">
+                        Course Performance
                       </span>
+                      <div className="flex flex-col gap-1 mt-1">
+                        <div className="student-info-row">
+                          <span className="student-key">Course:</span>
+                          <span className="student-val highlight">
+                            {s.Course_Name}
+                          </span>
+                        </div>
+                        <div className="student-info-row">
+                          <span className="student-key">Highest Grade:</span>
+                          <span className="student-val">{s.Highest_Grade}%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="student-info-item">
+                      <span className="student-label label-engagement">Engagement</span>
+                      <div className="student-info-row mt-1">
+                        <span className="student-key">Attempts Used:</span>
+                        <span className="student-val">{s.Used_Attempt}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
