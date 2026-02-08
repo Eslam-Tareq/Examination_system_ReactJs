@@ -26,6 +26,7 @@ const Sidebar = ({ active: _active }: Props) => {
             "examinations",
             "courses",
             "students",
+            "submissions",
           ].includes(item.id);
           return (
             <NavLink

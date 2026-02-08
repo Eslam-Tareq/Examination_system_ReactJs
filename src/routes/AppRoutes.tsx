@@ -13,6 +13,7 @@ import OverviewSection from "@/features/instructor/sections/overview/OverviewSec
 import ExaminationsSection from "@/features/instructor/sections/examinations/ExaminationsSection";
 import CoursesSection from "@/features/instructor/sections/courses/CoursesSection";
 import StudentsSection from "@/features/instructor/sections/students/StudentsSection";
+import SubmissionsPage from "@/features/instructor/pages/SubmissionsPage";
 import ExamPreviewPage from "@/features/instructor/pages/ExamPreviewPage";
 import ExamEditPage from "@/features/instructor/pages/ExamEditPage";
 import CreateExamPage from "@/features/instructor/pages/CreateExamPage";
@@ -58,6 +59,7 @@ const AppRoutes = () => {
             <Route path="examinations/create" element={<CreateExamPage />} />
             <Route path="courses" element={<CoursesSection />} />
             <Route path="students" element={<StudentsSection />} />
+            <Route path="submissions" element={<SubmissionsPage />} />
             <Route
               path="examinations/:examId/preview"
               element={<ExamPreviewPage />}
